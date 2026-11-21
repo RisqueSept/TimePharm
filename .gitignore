@@ -2,3 +2,5 @@
 .venv-timestral/
 data/models/
 __pycache__/
+.vercel
+.env*
