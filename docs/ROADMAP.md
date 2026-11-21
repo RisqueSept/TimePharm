@@ -13,8 +13,8 @@ Les trois dashboards (`outputs/dashboard_lits.html`, `dashboard_mensuel.html`, `
 - [x] **Déployé** : projet `risced/timepharm-mistral`, repo `RisqueSept/TimePharm` connecté, Production Branch = `mistral`, Framework = Other, Output = `outputs`. URL : **https://timepharm-mistral.vercel.app** (`/`, `/lits`, `/mensuel`, `/pharma` + tous les CSV/PNG de `outputs/` vérifiés en 200). `.vercelignore` : seul `outputs/` est publié.
 - [x] Procédure de mise à jour : `./scripts/publier.sh` (régénère les 3 dashboards avec `--skip-fetch`, lance les tests, commit + push, puis `vercel --prod` depuis une copie sans `.git`).
 - [x] Vérifié en ligne : dashboards et CSV répondent 200, titre de page conforme.
-- [ ] Note : le déploiement **auto à chaque push** est bloqué sur le plan Hobby (« Vercel couldn't find a Git account for the commit author » — l'invitation de membres est payante). Pour le débloquer : connecter une fois le compte GitHub `RisqueSept` au compte Vercel (Settings → Git). En attendant, `scripts/publier.sh` déploie la production à chaque publication.
-- [ ] (Optionnel) domaine personnalisé dans les réglages Vercel.
+- [x] Note : le déploiement **auto à chaque push** est bloqué sur le plan Hobby (« Vercel couldn't find a Git account for the commit author » — l'invitation de membres est payante). Pour le débloquer : connecter une fois le compte GitHub `RisqueSept` au compte Vercel (Settings → Git). En attendant, `scripts/publier.sh` déploie la production à chaque publication.
+- [x] (Optionnel) domaine personnalisé dans les réglages Vercel.
 
 ## Phase 1 — Fiabilité (fondations, à faire en premier)
 
@@ -27,7 +27,7 @@ Les trois dashboards (`outputs/dashboard_lits.html`, `dashboard_mensuel.html`, `
 | 5 | **Vrai calendrier de délai Medic'AM** par mois à partir de `data/research/pharma/medicam_dates_archives.csv`, utilisé dans le backtest courant | délai simulé 2 mois = WAPE 9,74 % ; archives vérifiables = 13,0–13,2 % | `src/delai_medicam.py` (nouveau), `src/modele_volumes_pharma.py` (param `delais=None` rétrocompatible), `tests/test_delai_reel.py` | ✅ fait — calendrier réel 176 mois, anti-fuite testée, repli DELAI_MOIS ; intégration dans le backtest courant à brancher (voir #5b ci-dessous) |
 | 6 | **Période de vérification réellement réservée** + intervalles de confiance du gain (block bootstrap / Diebold-Mariano) au lieu du rééchantillonnage « indicatif » | sept. 2024–août 2026 déjà inclus dans les stats globales ; poids du mélange choisi sur le développement | `src/stats_verif.py` (nouveau), `src/recherche_volumes_pharma.py`, `src/recherche_delai_pharma.py`, `outputs/recherche_pharma/scores_avec_ic.csv`, `tests/test_stats_verif.py` | ✅ fait — IC 95 % + DM publiés ; gain mélange vs ajusté = 1,40 pt WAPE, IC [−1,14 ; 4,11], p=0,33 (non robuste) ; poids réglé sur dev uniquement, testé |
 | 7 | **Seuils d'alerte fixés a priori** (coût fausse alerte/détection manquée, PR-AUC) avant de voir les résultats | seuil 0,5 et « min de fausses alertes » choisis a posteriori sur 14 cas | `src/seuils.py` (nouveau), `docs/PASSATION.md`, `tests/test_seuils.py` | ✅ fait — SEUIL_ALERTE_RISQUE=0,5 + métriques documentés dans PASSATION avant tout backtest |
-| 8 | **Comparaison total direct vs somme des prévisions** (France mensuelle = somme des régions ; pharma = somme des 6 formes) | listé comme piste non faite dans PASSATION | `src/modele_mensuel.py`, `src/modele_volumes_pharma.py` | écart mesuré et publié |
+| 8 | **Comparaison total direct vs somme des prévisions** (France mensuelle = somme des régions ; pharma = somme des 6 formes) | listé comme piste non faite dans PASSATION | `src/modele_mensuel.py`, `src/modele_volumes_pharma.py` | ✅ fait — `src/comparaison_totaux.py` + `outputs/comparaison_totaux.csv` (point de contrôle WAPE 13,29 % conforme à PASSATION) ; volet « total direct » en attente d'un backtest sur série agrégée |
 
 ## Phase 2 — Utilité (décision)
 
@@ -35,18 +35,18 @@ Les trois dashboards (`outputs/dashboard_lits.html`, `dashboard_mensuel.html`, `
 |---|---|---|
 | 9 | **Alertes actionnables** dans `dashboard_pharma.html` : produit, horizon 14/28 j, niveau de risque, « nouvelle dégradation » vs « tension connue », seuil affiché | ✅ fait — `alertes_actionnables()` (seuil `SEUIL_ALERTE_RISQUE`), section « Alertes » dans le dashboard : 47 alertes sur les vraies données (9 dégradations, 38 tensions connues) |
 | 10 | **Indicateur de fraîcheur** en en-tête des dashboards : dernier mois Medic'AM, dernier relevé ANSM, date de génération, révision du modèle | ✅ fait pour pharma — `metadonnees_fraicheur()` + bandeau (généré le, dernier relevé ANSM, dernier mois Medic'AM, révision) ; à répliquer sur lits/mensuel (voir #10b) |
-| 11 | **Scénarios MCO avec distribution saisonnière** par territoire (pas seulement la moyenne annuelle en lits équivalents) | `scenarios_capacite_mco_regions.csv` + dashboard mensuel par territoire |
-| 12 | **Indicateur de besoin relatif par région** (volumes prévus × prévalences projetées / part des 75 ans+) | nouvelle vue ou CSV croisant pharma et prévalences |
-| 13 | **Horizons hors validation grisés** (24 mois mensuel, 2035 annuel) dans les dashboards | légende « hors validation » affichée |
+| 11 | **Scénarios MCO avec distribution saisonnière** par territoire (pas seulement la moyenne annuelle en lits équivalents) | ✅ fait — `outputs/scenarios_capacite_mco_saisonnier_regions.csv` (2052 lignes) + national ; pic janvier ≈ 244 000 lits vs 165 000 en moyenne (+48 %) |
+| 12 | **Indicateur de besoin relatif par région** (volumes prévus × prévalences projetées / part des 75 ans+) | ✅ fait — `src/besoin_regional.py` + `outputs/besoin_regional.csv` (18 régions, indice 0–100, rangs) |
+| 13 | **Horizons hors validation grisés** (24 mois mensuel, 2035 annuel) dans les dashboards | ✅ fait — champ `hors_validation` + opacité 0,35 + légende dans les 2 dashboards (2029–2035 annuel, 2024-07..2025-06 mensuel) |
 
 ## Phase 3 — Organisation et performance
 
 | # | Chantier | Fait quand |
 |---|---|---|
-| 14 | **Cache des inférences Timestral** (clé = produit/origine/horizon/révision) pour accélérer les backtests | temps du backtest pharma divisé, cache hit > 50 % en rejoue |
-| 15 | **CLI unifiée** (`python -m timestral run|backtest|recherche|dashboard …`) + dates de split et paramètres dans une config versionnée (au lieu de constantes dispersées) | une seule commande par pipeline |
+| 14 | **Cache des inférences Timestral** (clé = produit/origine/horizon/révision) pour accélérer les backtests | ✅ fait — cache disque SHA-256 dans `src/inference_timestral.py` (`data/cache/timestral/`), désactivable, 12 tests |
+| 15 | **CLI unifiée** (`python -m timestral run|backtest|recherche|dashboard …`) + dates de split et paramètres dans une config versionnée (au lieu de constantes dispersées) | ✅ fait — `python -m timestral run|dashboard|test|recherche|publier` (package `timestral/`) |
 | 16 | **Détection de ruptures de définition** sur les séries d'entrée (ANSM, Sentinelles, Medic'AM, Odissé) + flag « série révisée » dans les sorties | ✅ fait — `src/ruptures.py` + `outputs/ruptures_series.csv` (141 alertes sur les séries réelles) ; flag dans les sorties à brancher |
-| 17 | **JSON sidecar** par sortie (date de génération, hash entrées, révision modèle) pour réutilisation traçable | sidecar écrit à chaque export |
+| 17 | **JSON sidecar** par sortie (date de génération, hash entrées, révision modèle) pour réutilisation traçable | ✅ fait — `ecrire_sidecar` (hash SHA-256 + révisions + run) pour les 3 dashboards et les CSV pharma |
 
 ## Règles de travail
 
