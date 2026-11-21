@@ -180,6 +180,181 @@ def scenarios_mco_regionaux():
     return scenarios
 
 
+# --------------------------------------------------- scénarios MCO saisonniers
+# Le SAE ne publie l'activité MCO (JOU_MCO) qu'au niveau annuel. La seule
+# série mensuelle territoriale d'hospitalisation disponible localement est
+# l'hospitalisation SARS-CoV-2 (SPF, 2020-03 -> 2023-06) : on en déduit un
+# profil saisonnier par région (niveau journalier moyen par mois calendaire,
+# moyenne sur les années observées). À défaut de série mensuelle pour une
+# région, un profil plat documenté est utilisé (charge journalière constante :
+# part_m = jours_m / jours_annee).
+
+
+def _jours_par_mois(annee: int) -> dict:
+    """Nombre de jours de chaque mois de l'année de référence."""
+    return {m: calendar.monthrange(annee, m)[1] for m in range(1, 13)}
+
+
+def _niveau_mensuel_hosp_regional() -> pd.DataFrame:
+    """Niveau journalier moyen d'hospitalisation par (région, mois calendaire).
+
+    Source privilégiée : data/processed/table_mensuelle_regions.csv (lits COVID
+    occupés ramenés à un taux pour 100 000 habitants). Sinon repli sur l'export
+    brut SPF data/raw/mensuel/covid_hosp_txad_reg.csv (PourAvec=0, tx_prev_hosp).
+    Renvoie un DataFrame (reg, mois, niveau) vide si aucune source n'existe.
+    """
+    chemin = os.path.join(PROCESSED, "table_mensuelle_regions.csv")
+    if os.path.exists(chemin):
+        df = pd.read_csv(chemin)
+        niveau = (pd.to_numeric(df.lits_covid_occupes, errors="coerce")
+                  / pd.to_numeric(df.population, errors="coerce") * 1e5)
+        out = pd.DataFrame({
+            "reg": df.reg.astype(int),
+            "mois": pd.to_datetime(df.mois).dt.month,
+            "niveau": niveau,
+        }).replace([np.inf, -np.inf], np.nan).dropna(subset=["niveau"])
+        return out.groupby(["reg", "mois"], as_index=False).niveau.mean()
+    brut = os.path.join(RAW, "mensuel", "covid_hosp_txad_reg.csv")
+    if os.path.exists(brut):
+        df = pd.read_csv(brut, sep=";")
+        df = df[df.PourAvec == 0]
+        out = pd.DataFrame({
+            "reg": pd.to_numeric(df.reg, errors="coerce").astype("Int64").astype(int),
+            "mois": pd.to_datetime(df.jour).dt.month,
+            "niveau": pd.to_numeric(df.tx_prev_hosp, errors="coerce"),
+        }).dropna(subset=["reg", "niveau"])
+        return out.groupby(["reg", "mois"], as_index=False).niveau.mean()
+    return pd.DataFrame(columns=["reg", "mois", "niveau"])
+
+
+def charger_profil_saisonnier_mco(annee_ref: int, regions=None) -> pd.DataFrame:
+    """Profil saisonnier des journées MCO : part de chaque mois dans l'année.
+
+    Pour chaque région, la part du mois m vaut
+        niveau_m * jours_m / somme_k(niveau_k * jours_k)
+    où niveau_m est le niveau journalier moyen du mois calendaire m (moyenne
+    sur les années observées de la série mensuelle territoriale). Les parts
+    somment à 1 par région. Une région sans série mensuelle (ou de niveau nul)
+    reçoit le profil plat documenté : part_m = jours_m / jours_annee.
+
+    Renvoie un DataFrame (reg, mois, part, source_profil).
+    """
+    jours = _jours_par_mois(annee_ref)
+    jours_annee = sum(jours.values())
+    niveau = _niveau_mensuel_hosp_regional()
+    if regions is None:
+        regions = sorted(niveau.reg.unique()) if not niveau.empty else []
+    lignes = []
+    for reg in regions:
+        sous = niveau[niveau.reg == reg] if not niveau.empty else niveau
+        if not sous.empty:
+            moy = sous.groupby("mois").niveau.mean()
+            poids = {m: float(moy.get(m, 0.0)) * jours[m] for m in range(1, 13)}
+            total = sum(poids.values())
+        else:
+            poids, total = {}, 0.0
+        if total <= 0:  # profil plat documenté : charge journalière constante
+            parts = {m: jours[m] / jours_annee for m in range(1, 13)}
+            source = "profil_plat"
+        else:
+            parts = {m: poids[m] / total for m in range(1, 13)}
+            source = "spf_covid_mensuel"
+        for m in range(1, 13):
+            lignes.append({"reg": int(reg), "mois": m, "part": parts[m], "source_profil": source})
+    return pd.DataFrame(lignes)
+
+
+def scenarios_mco_saisonnier_regionaux(profil=None) -> pd.DataFrame:
+    """Scénarios MCO territoriaux avec distribution saisonnière mensuelle.
+
+    Pour chaque région et chaque hypothèse (variation d'activité x taux
+    d'occupation cible), la charge annuelle de référence (JOU_MCO) est
+    répartie entre les 12 mois selon le profil saisonnier ; le mois m exige
+        lits_equivalents_pic = ceil(journees_m * (1+variation) / (jours_m * taux))
+    lits_equivalents_moyen reste la moyenne annuelle du scénario
+    (identique à scenarios_capacite_mco_regions.csv). Le pic est donc toujours
+    >= la moyenne. Écrit outputs/scenarios_capacite_mco_saisonnier_regions.csv.
+    """
+    mco = pd.read_csv(os.path.join(PROCESSED, "mco_regional_reference.csv"))
+    mco["territoire"] = mco.reg.map({**REGIONS, 5: "Saint-Pierre-et-Miquelon"})
+    if mco.territoire.isna().any() or not mco.jli_mco.gt(0).all():
+        raise ValueError("Territoire ou journées de capacité MCO de référence invalides")
+    annee_ref = int(mco.annee.max())
+    if profil is None:
+        profil = charger_profil_saisonnier_mco(annee_ref, regions=sorted(mco.reg.unique()))
+    jours = _jours_par_mois(annee_ref)
+    jours_annee = sum(jours.values())
+    hypotheses = pd.DataFrame(HYPOTHESES_MCO, columns=["variation_activite", "taux_occupation_cible"])
+    base = (mco.rename(columns={"annee": "annee_reference", "jou_mco": "journees_mco_reference",
+                               "lit_mco": "lits_sae_mco_au_31_decembre"})
+               .merge(profil, on="reg", how="left", validate="one_to_many")
+               .merge(hypotheses, how="cross"))
+    if base.part.isna().any():
+        raise ValueError("Région sans profil saisonnier MCO")
+    base["jours_du_mois"] = base.mois.map(jours)
+    base["journees_mco_mois"] = base.journees_mco_reference * base.part
+    charge = base.journees_mco_reference * (1 + base.variation_activite)
+    charge_mois = base.journees_mco_mois * (1 + base.variation_activite)
+    # même ordre d'opérations que scenarios_mco_regionaux pour la moyenne annuelle
+    base["lits_equivalents_moyen"] = np.ceil(charge / jours_annee / base.taux_occupation_cible).astype(int)
+    base["lits_equivalents_pic"] = np.ceil(charge_mois / base.jours_du_mois / base.taux_occupation_cible).astype(int)
+    cols = ["annee_reference", "reg", "territoire", "lits_sae_mco_au_31_decembre",
+            "journees_mco_reference", "variation_activite", "taux_occupation_cible", "mois",
+            "jours_du_mois", "part_saisonnier", "journees_mco_mois",
+            "lits_equivalents_pic", "lits_equivalents_moyen", "source_profil"]
+    out = (base.assign(part_saisonnier=base.part.round(6), journees_mco_mois=base.journees_mco_mois.round(1))
+              .sort_values(["reg", "variation_activite", "taux_occupation_cible", "mois"])
+              .reset_index(drop=True)[cols])
+    os.makedirs(OUT, exist_ok=True)
+    out.to_csv(os.path.join(OUT, "scenarios_capacite_mco_saisonnier_regions.csv"), index=False)
+    return out
+
+
+def scenarios_mco_saisonnier_national(saisonnier=None) -> pd.DataFrame:
+    """Version nationale du profil saisonnier MCO (somme des régions).
+
+    Les journées mensuelles et les lits SAE de référence sont sommés sur les
+    régions ; les lits équivalents sont recalculés sur ces totaux. Écrit
+    outputs/scenarios_capacite_mco_saisonnier_national.csv (reg=0,
+    territoire='France entière').
+    """
+    if saisonnier is None:
+        saisonnier = scenarios_mco_saisonnier_regionaux()
+    g = (saisonnier.groupby(["annee_reference", "variation_activite", "taux_occupation_cible", "mois"],
+                            as_index=False)
+         .agg(journees_mco_reference=("journees_mco_reference", "sum"),
+              lits_sae_mco_au_31_decembre=("lits_sae_mco_au_31_decembre", "sum"),
+              jours_du_mois=("jours_du_mois", "first"),
+              journees_mco_mois=("journees_mco_mois", "sum")))
+    annee_ref = int(g.annee_reference.iloc[0])
+    jours_annee = 365 + calendar.isleap(annee_ref)
+    g["part_saisonnier"] = g.journees_mco_mois / g.journees_mco_reference
+    charge = g.journees_mco_reference * (1 + g.variation_activite)
+    g["lits_equivalents_moyen"] = np.ceil(charge / jours_annee / g.taux_occupation_cible).astype(int)
+    g["lits_equivalents_pic"] = np.ceil(
+        g.journees_mco_mois * (1 + g.variation_activite) / g.jours_du_mois / g.taux_occupation_cible).astype(int)
+    g["reg"] = 0
+    g["territoire"] = "France entière"
+    g["source_profil"] = "somme_regions"
+    cols = ["annee_reference", "reg", "territoire", "lits_sae_mco_au_31_decembre",
+            "journees_mco_reference", "variation_activite", "taux_occupation_cible", "mois",
+            "jours_du_mois", "part_saisonnier", "journees_mco_mois",
+            "lits_equivalents_pic", "lits_equivalents_moyen", "source_profil"]
+    out = (g.assign(part_saisonnier=g.part_saisonnier.round(6), journees_mco_mois=g.journees_mco_mois.round(1))
+              .sort_values(["variation_activite", "taux_occupation_cible", "mois"])
+              .reset_index(drop=True)[cols])
+    os.makedirs(OUT, exist_ok=True)
+    out.to_csv(os.path.join(OUT, "scenarios_capacite_mco_saisonnier_national.csv"), index=False)
+    return out
+
+
+def scenarios_mco_saisonnier() -> dict:
+    """Scénarios MCO saisonniers territoriaux + version nationale."""
+    regions = scenarios_mco_saisonnier_regionaux()
+    national = scenarios_mco_saisonnier_national(regions)
+    return {"regions": regions, "national": national}
+
+
 def entrainer_et_prevoir(df: pd.DataFrame, moteur):
     hist = df.sort_values("annee")
     if len(hist) < 6 or not hist.annee.diff().dropna().eq(1).all():
@@ -210,6 +385,7 @@ def entrainer_et_prevoir(df: pd.DataFrame, moteur):
     prev.to_csv(os.path.join(OUT, "prediction_lits_2026_2035.csv"), index=False)
     scenarios_mco(hist, prev)
     scenarios_mco_regionaux()
+    scenarios_mco_saisonnier()
     print(prev.to_string(index=False))
     return {"df": hist, "test": bt, "meilleur": principal.removeprefix("pred_"),
             "pred_test_meilleur": bt[principal], "prev": prev}
