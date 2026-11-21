@@ -10,10 +10,19 @@
 <header class="top">
   <div class="wrap nav">
     <a class="brand" href="#haut"><span aria-hidden="true" class="brand-icon">↗</span> Prévisions santé</a>
-    <nav aria-label="Sections"><a href="#backtest">Tensions</a><a href="#boites">Boîtes</a><a href="#signaux">Données</a><a href="#methode">Méthode</a></nav>
+    <nav aria-label="Sections"><a href="#alertes">Alertes</a><a href="#backtest">Tensions</a><a href="#boites">Boîtes</a><a href="#signaux">Données</a><a href="#methode">Méthode</a></nav>
   </div>
 </header>
 <main id="haut" class="wrap">
+  <aside class="fraicheur" aria-label="Fraîcheur des données et du modèle">
+    <span class="fraicheur-titre">Données à jour</span>
+    <dl>
+      <div><dt>Tableau généré le</dt><dd id="fresh-generation">—</dd></div>
+      <div><dt>Dernier relevé ANSM</dt><dd id="fresh-ansm">—</dd></div>
+      <div><dt>Dernier mois Medic’AM</dt><dd id="fresh-medicam">—</dd></div>
+      <div><dt>Révision du modèle</dt><dd id="fresh-revision">—</dd></div>
+    </dl>
+  </aside>
   <header class="hero">
     <div>
       <p class="eyebrow">France · Antibiotiques pédiatriques</p>
@@ -26,6 +35,21 @@
       <div><dt>Dernier relevé étudié</dt><dd id="last-report"></dd></div>
     </dl>
   </header>
+
+  <section id="alertes" aria-labelledby="alertes-title">
+    <div class="section-head">
+      <div><h2 id="alertes-title">Alertes</h2><p>Prévisions hors échantillon dont le score de risque de Timestral-209M atteint le seuil d’alerte de <strong id="alertes-seuil"></strong> (fixé a priori). « Nouvelle dégradation » : la couverture des grossistes était encore suffisante au départ. « Tension connue » : l’insuffisance était déjà constatée au dernier relevé.</p></div>
+    </div>
+    <div class="panel">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Score de risque</th><th>Type d’alerte</th><th>Forme buvable</th><th>Horizon</th><th>Date de prévision</th><th>Relevé visé</th><th>Constaté au relevé</th></tr></thead>
+          <tbody id="alertes-rows"></tbody>
+        </table>
+      </div>
+      <p class="caption" id="alertes-caption"></p>
+    </div>
+  </section>
 
   <section id="backtest" aria-labelledby="backtest-title">
     <div class="section-head">

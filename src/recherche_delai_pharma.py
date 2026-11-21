@@ -13,6 +13,7 @@ from .recherche_volumes_pharma import (
     scores,
     timestral,
 )
+from .stats_verif import scores_avec_ic
 
 
 TIMESTRAL = "timestral_60_mois"
@@ -21,8 +22,19 @@ POIDS = np.linspace(0, 1, 5)
 
 
 def poids_du_melange(developpement):
-    """Choisit le poids par minimisation de l'erreur absolue sur le développement."""
-    donnees = developpement.loc[developpement.index <= FIN_DEV]
+    """Choisit le poids par minimisation de l'erreur absolue sur le développement.
+
+    Le réglage n'utilise JAMAIS la période de vérification réservée : tout mois
+    d'index >= DEBUT_VERIFICATION en est exclu. FIN_DEV étant strictement
+    antérieure à DEBUT_VERIFICATION par construction (testé dans
+    tests/test_recherche_pharma.py), le filtre ci-dessous exclut en même temps
+    la zone tampon imposée par le délai de publication simulé.
+    """
+    donnees = developpement.loc[
+        (developpement.index <= FIN_DEV) & (developpement.index < DEBUT_VERIFICATION)
+    ]
+    if donnees.empty:
+        raise ValueError("Aucune cible de développement : le poids du mélange ne peut pas être réglé.")
     predictions = (donnees[TIMESTRAL].to_numpy()[:, None] * POIDS
                    + donnees[SAISONNIER].to_numpy()[:, None] * (1 - POIDS))
     erreurs = np.abs(predictions - donnees.observe.to_numpy()[:, None]).mean(axis=0)
@@ -84,6 +96,21 @@ def experimenter_delai(racine, date_depart=None):
     verification.to_csv(destination / "verification_delai.csv", float_format="%.4f")
     resultats.to_csv(destination / "scores_delai.csv", index=False, float_format="%.4f")
     print(resultats.to_string(index=False))
+    # IC du gain du mélange (poids réglé sur le seul développement) vs chaque
+    # référence, sur la période de vérification réservée.
+    avec_ic = scores_avec_ic(verification, comparables, meilleur="melange")
+    avec_ic["scenario"] = np.where(
+        avec_ic.modele.str.startswith("hypothese"), "volumes_plus_recents_simules", "delai_courant"
+    )
+    avec_ic["periode"] = "verification_delai"
+    avec_ic["poids_timestral_melange"] = poids
+    fichier_ic = destination / "scores_avec_ic.csv"
+    if fichier_ic.exists():
+        deja = pd.read_csv(fichier_ic)
+        avec_ic = pd.concat([deja.loc[deja.periode.ne("verification_delai")], avec_ic],
+                            ignore_index=True)
+    avec_ic.to_csv(fichier_ic, index=False, float_format="%.4f")
+    print(avec_ic.to_string(index=False), flush=True)
     if date_depart is not None:
         fichier = destination / f"prevision_prospective_{date_depart.isoformat()}.csv"
         if fichier.exists():

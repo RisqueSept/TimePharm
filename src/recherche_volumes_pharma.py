@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 
 from .inference_timestral import MistralTimestral, cycle
 from .modele_volumes_pharma import DELAI_MOIS
+from .stats_verif import scores_avec_ic
 
 
 DEBUT = pd.Period("2018-01", freq="M")
@@ -197,6 +198,15 @@ def experimenter(racine):
     comparaison = list(dict.fromkeys([candidat, REFERENCE, "saisonnier", "saisonnier_ajuste"]))
     stats_test = scores(verification, comparaison)
     print(stats_test.to_string(index=False), flush=True)
+    # Incertitude du gain (bootstrap par blocs + Diebold-Mariano) mesurée sur
+    # chaque période ; le candidat retenu ne dépend que du développement.
+    avec_ic = pd.concat([
+        scores_avec_ic(developpement, candidats).assign(
+            periode="developpement", candidat_retenu=candidat),
+        scores_avec_ic(verification, comparaison, meilleur=candidat).assign(
+            periode="verification", candidat_retenu=candidat),
+    ])
+    print(avec_ic.loc[avec_ic.periode.eq("verification")].to_string(index=False), flush=True)
     destination = racine / "outputs" / "recherche_pharma"
     destination.mkdir(parents=True, exist_ok=True)
     developpement.to_csv(destination / "developpement.csv", float_format="%.4f")
@@ -207,3 +217,4 @@ def experimenter(racine):
         stats_dev.assign(periode="developpement", candidat_retenu=candidat),
         stats_test.assign(periode="verification", candidat_retenu=candidat),
     ]).to_csv(destination / "scores.csv", index=False, float_format="%.4f")
+    avec_ic.to_csv(destination / "scores_avec_ic.csv", index=False, float_format="%.4f")

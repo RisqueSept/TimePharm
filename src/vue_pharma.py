@@ -6,16 +6,23 @@ from pathlib import Path
 from plotly.offline import get_plotlyjs
 
 from .dashboard import enregistrements
-from .modele_pharma import HORIZONS, PRODUITS
+from .modele_pharma import HORIZONS, PRODUITS, alertes_actionnables, metadonnees_fraicheur
+from .seuils import SEUIL_ALERTE_RISQUE
 
 
-def generer_dashboard(destination, stocks, ira, volumes, predictions, test_volumes, futur_volumes):
+def generer_dashboard(destination, stocks, ira, volumes, predictions, test_volumes, futur_volumes,
+                      fraicheur=None):
     dossier = Path(__file__).resolve().parent
     colonnes = [
         "origine", "observation_initiale", "cible", "cible_disponible", "saison",
         "produit", "horizon", "delai_reel", "observé", "grossistes", "reference",
         "contexte", "degradation", "timestral", "source_initiale", "source_cible", "ira_incidence",
     ]
+    colonnes_alertes = [
+        "origine", "cible", "saison", "produit", "horizon", "timestral", "degradation",
+        "type_alerte", "seuil", "grossistes", "observé", "source_cible",
+    ]
+    alertes = alertes_actionnables(predictions)
     donnees = {
         "produits": PRODUITS,
         "horizons": HORIZONS,
@@ -25,6 +32,9 @@ def generer_dashboard(destination, stocks, ira, volumes, predictions, test_volum
         "volumes_test": enregistrements(test_volumes),
         "volumes_futur": enregistrements(futur_volumes),
         "predictions": enregistrements(predictions[colonnes]),
+        "alertes": enregistrements(alertes[colonnes_alertes]),
+        "seuil_alerte": SEUIL_ALERTE_RISQUE,
+        "fraicheur": fraicheur if fraicheur is not None else metadonnees_fraicheur(stocks, volumes, None),
     }
     replacements = {
         "__CSS__": (dossier / "pharma.css").read_text(encoding="utf-8"),

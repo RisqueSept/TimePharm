@@ -1,6 +1,8 @@
 """Backtest chronologique sur les relevés de couverture de l'ANSM."""
 
-from datetime import date
+import json
+from datetime import date, datetime, timezone
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -10,6 +12,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from .inference_timestral import probabilite_depassement
+from .seuils import SEUIL_ALERTE_RISQUE
 
 
 PRODUITS = {
@@ -177,3 +180,48 @@ def previsions_timestral(stocks, ira, backtest, moteur):
         ]
         resultats.append(lignes.assign(timestral=valeurs))
     return pd.concat(resultats).sort_index()
+
+
+def alertes_actionnables(df_predictions, seuil=SEUIL_ALERTE_RISQUE, colonne_score="timestral"):
+    """Prévisions hors échantillon dont le score de risque atteint le seuil d'alerte.
+
+    Fonction pure : ne modifie pas `df_predictions`. Retourne une copie triée par
+    score décroissant (tri stable), avec deux colonnes ajoutées :
+    - `type_alerte` : « nouvelle dégradation » quand la colonne `degradation` est
+      non nulle (départ en couverture encore suffisante), « tension connue » sinon ;
+    - `seuil` : seuil appliqué, pour affichage dans le tableau de bord.
+    """
+    alertes = df_predictions.loc[df_predictions[colonne_score] >= seuil].copy()
+    if "degradation" in alertes.columns:
+        nouvelle = alertes["degradation"].notna()
+    else:
+        nouvelle = pd.Series(False, index=alertes.index)
+    alertes["type_alerte"] = np.where(nouvelle, "nouvelle dégradation", "tension connue")
+    alertes["seuil"] = seuil
+    return alertes.sort_values(colonne_score, ascending=False, kind="mergesort", ignore_index=True)
+
+
+def metadonnees_fraicheur(stocks, volumes, manifest=None):
+    """Métadonnées de fraîcheur affichées en bandeau du tableau de bord pharma.
+
+    `manifest` : dictionnaire du manifeste (contenu de `outputs/manifest.json`),
+    ou chemin vers ce fichier (lu s'il est présent), ou None.
+    Retourne un dict JSON-sérialisable avec dates en ISO 8601 :
+    - `date_generation` : date/heure UTC du run (celle du manifeste si fournie) ;
+    - `dernier_releve_ansm` : dernière observation ANSM (max de `stocks.observation`) ;
+    - `dernier_releve_disponible` : date de disponibilité de ce dernier relevé (max) ;
+    - `dernier_mois_medicam` : dernier mois Medic'AM chargé (max de `volumes.mois`) ;
+    - `revision_modele` : révision du modèle lue dans le manifeste, None si absent.
+    """
+    if isinstance(manifest, (str, Path)):
+        chemin = Path(manifest)
+        manifest = json.loads(chemin.read_text(encoding="utf-8")) if chemin.exists() else None
+    manifest = manifest or {}
+    date_generation = manifest.get("date_utc") or datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return {
+        "date_generation": date_generation,
+        "dernier_releve_ansm": stocks.observation.max().isoformat(),
+        "dernier_releve_disponible": stocks.disponible.max().isoformat(),
+        "dernier_mois_medicam": volumes.mois.max().isoformat(),
+        "revision_modele": manifest.get("revision_modele"),
+    }

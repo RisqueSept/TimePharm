@@ -9,6 +9,7 @@ const number = new Intl.NumberFormat("fr-FR");
 const decimal = new Intl.NumberFormat("fr-FR", {maximumFractionDigits: 3, minimumFractionDigits: 3});
 const percent = new Intl.NumberFormat("fr-FR", {style: "percent", maximumFractionDigits: 1});
 const dateFormat = new Intl.DateTimeFormat("fr-FR", {day:"numeric", month:"short", year:"numeric", timeZone:"UTC"});
+const dateTimeFormat = new Intl.DateTimeFormat("fr-FR", {day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit", timeZone:"UTC"});
 const monthFormat = new Intl.DateTimeFormat("fr-FR", {month:"long", year:"numeric", timeZone:"UTC"});
 const formatDate = value => dateFormat.format(new Date(value.slice(0, 10) + "T00:00:00Z"));
 const formatMonth = value => monthFormat.format(new Date(value.slice(0, 10) + "T00:00:00Z"));
@@ -300,6 +301,62 @@ function renderOnset(rows, threshold, newOnly) {
     : "";
 }
 
+function renderFraicheur() {
+  const f = data.fraicheur || {};
+  byId("fresh-generation").textContent = f.date_generation
+    ? dateTimeFormat.format(new Date(f.date_generation)) + " UTC" : "—";
+  byId("fresh-ansm").textContent = f.dernier_releve_ansm
+    ? formatDate(f.dernier_releve_ansm) + " (publié le " + formatDate(f.dernier_releve_disponible) + ")"
+    : "—";
+  byId("fresh-medicam").textContent = f.dernier_mois_medicam ? formatMonth(f.dernier_mois_medicam) : "—";
+  const revision = byId("fresh-revision");
+  if (f.revision_modele) {
+    revision.textContent = String(f.revision_modele).slice(0, 12);
+    revision.title = "Révision complète : " + f.revision_modele + " (outputs/manifest.json)";
+  } else {
+    revision.textContent = "—";
+    revision.title = "Manifeste absent : révision du modèle inconnue";
+  }
+}
+
+function renderAlertes() {
+  const seuil = data.seuil_alerte ?? 0.5;
+  byId("alertes-seuil").textContent = percent.format(seuil);
+  const rows = data.alertes || [];
+  const nouvelles = rows.filter(row => row.type_alerte === "nouvelle dégradation").length;
+  byId("alertes-rows").replaceChildren(...rows.map(row => {
+    const tr = document.createElement("tr");
+    const score = tr.insertCell();
+    score.textContent = percent.format(row.timestral);
+    score.className = "score";
+    const type = tr.insertCell();
+    const badge = document.createElement("span");
+    const isNew = row.type_alerte === "nouvelle dégradation";
+    badge.className = "badge " + (isNew ? "badge-new" : "badge-known");
+    badge.textContent = isNew ? "Nouvelle dégradation" : "Tension connue";
+    type.append(badge);
+    tr.insertCell().textContent = data.produits[row.produit] ?? row.produit;
+    tr.insertCell().textContent = row.horizon + " j";
+    tr.insertCell().textContent = formatDate(row.origine);
+    const cible = tr.insertCell();
+    if (row.source_cible) {
+      const link = document.createElement("a");
+      link.href = row.source_cible;
+      link.textContent = formatDate(row.cible);
+      link.title = "Ouvrir le relevé ANSM visé";
+      cible.append(link);
+    } else {
+      cible.textContent = formatDate(row.cible);
+    }
+    tr.insertCell().textContent = row.observé ? "Insuffisance" : "Couverture suffisante";
+    return tr;
+  }));
+  byId("alertes-caption").textContent = rows.length
+    ? rows.length + " alerte(s) au seuil de " + percent.format(seuil) + ", triées par score décroissant — dont "
+      + nouvelles + " nouvelle(s) dégradation(s) et " + (rows.length - nouvelles) + " tension(s) connue(s)."
+    : "Aucune prévision hors échantillon n’atteint le seuil d’alerte de " + percent.format(seuil) + ".";
+}
+
 function renderBacktest(refreshTable) {
   const {product, threshold, rows, newOnly} = selection();
   byId("threshold-value").textContent = percent.format(threshold);
@@ -321,5 +378,7 @@ byId("new-only").addEventListener("change", () => renderBacktest(true));
 byId("threshold").addEventListener("input", () => renderBacktest(false));
 ["box-product", "box-horizon"].forEach(id => byId(id).addEventListener("change", renderBoxes));
 compact.addEventListener("change", () => { renderAll(); renderBoxes(); });
+renderFraicheur();
+renderAlertes();
 renderAll();
 renderBoxes();

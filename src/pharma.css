@@ -39,6 +39,16 @@ select {margin-top:5px;width:100%;padding:8px 10px;border:1px solid #d8d0e9;bord
 .filters.box-filters {grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
 .check {display:flex;gap:8px;align-items:center;margin:0 0 12px;padding:3px 2px}
 .check input {width:16px;height:16px;accent-color:var(--violet)}
+.fraicheur {display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-left:4px solid var(--violet);border-radius:12px;padding:11px 18px;margin:20px 0 0;font-size:.82rem}
+.fraicheur-titre {font-weight:750;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--violet)}
+.fraicheur dl {display:flex;gap:28px;flex-wrap:wrap;margin:0}
+.fraicheur dl div {display:flex;flex-direction:column}
+.fraicheur dt {color:var(--muted);font-size:.72rem;font-weight:600}
+.fraicheur dd {font-weight:700;font-size:.88rem;letter-spacing:-.01em}
+.badge {display:inline-block;padding:2px 10px;border-radius:99px;font-size:.74rem;font-weight:700;white-space:nowrap}
+.badge-new {background:#fbe3ea;color:#a02347}
+.badge-known {background:#f7ecd7;color:#8a5c10}
+#alertes .score {font-weight:750;color:var(--navy)}
 .benchmark {font-size:.82rem;color:var(--muted);margin:0 0 12px;padding-left:2px}
 .metrics {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
 .metrics article,.panel,.method article {background:white;border:1px solid var(--line);border-radius:13px}
@@ -85,6 +95,8 @@ thead {position:sticky;top:0;background:#f2eff9}
   .hero-stats div:last-child {grid-column:1/-1}
   .hero-stats dd {font-size:1.13rem}
   nav {gap:11px;font-size:.75rem}
+  .fraicheur {gap:10px;padding:10px 14px}
+  .fraicheur dl {gap:14px}
   .section-head {align-items:flex-start;flex-direction:column}
   .metrics {grid-template-columns:repeat(2,minmax(0,1fr))}
   .split,.method {grid-template-columns:1fr;gap:0}
