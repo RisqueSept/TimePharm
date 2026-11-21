@@ -1,0 +1,12 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,periode,candidat_retenu
+avec_profil_3ans_6mois,78,146923.8452,16.9176,3.7041,752850.3760,developpement,avec_profil_3ans_6mois
+profil_3ans_6mois,78,151488.1789,17.4431,1.7933,829118.7520,developpement,avec_profil_3ans_6mois
+avec_profil_5ans_6mois,78,151597.3483,17.4557,5.0236,681381.5354,developpement,avec_profil_3ans_6mois
+avec_profil_3ans_3mois,78,153613.9676,17.6879,4.5962,786805.0349,developpement,avec_profil_3ans_6mois
+profil_5ans_6mois,78,160081.5710,18.4326,4.4324,686181.0709,developpement,avec_profil_3ans_6mois
+avec_profil_5ans_3mois,78,161436.3908,18.5886,5.5162,709222.9981,developpement,avec_profil_3ans_6mois
+melange,78,163160.8205,18.7872,5.6148,741292.0000,developpement,avec_profil_3ans_6mois
+profil_3ans_3mois,78,167299.4415,19.2637,3.5775,832318.0698,developpement,avec_profil_3ans_6mois
+profil_5ans_3mois,78,178424.7630,20.5448,5.4176,746163.1723,developpement,avec_profil_3ans_6mois
+melange,24,78708.7500,9.7352,1.2725,243164.0000,verification_reutilisee,avec_profil_3ans_6mois
+avec_profil_3ans_6mois,24,90036.2031,11.1362,2.5651,299485.4207,verification_reutilisee,avec_profil_3ans_6mois

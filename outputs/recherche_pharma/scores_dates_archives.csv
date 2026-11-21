@@ -1,0 +1,17 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,jour_origine,archives
+melange_delai_fixe,23,79518.0435,9.8616,1.0073,243164.0000,1,atc
+timestral_archives,23,100950.6957,12.5196,3.7927,309342.0000,1,atc
+melange_archives,23,106619.8696,13.2227,7.3939,264164.0000,1,atc
+saisonnier_archives,23,148208.0435,18.3803,10.9952,295083.0000,1,atc
+melange_delai_fixe,24,78708.7500,9.7352,1.2725,243164.0000,21,atc
+timestral_archives,24,96178.4583,11.8959,3.5550,309342.0000,21,atc
+melange_archives,24,105094.0000,12.9987,7.4277,264164.0000,21,atc
+saisonnier_archives,24,150579.5417,18.6246,11.3004,295083.0000,21,atc
+melange_delai_fixe,23,79518.0435,9.8616,1.0073,243164.0000,1,atc_et_prescripteurs
+timestral_archives,23,101778.8261,12.6223,3.8954,309342.0000,1,atc_et_prescripteurs
+melange_archives,23,105800.0000,13.1210,7.6916,264164.0000,1,atc_et_prescripteurs
+saisonnier_archives,23,146896.7391,18.2177,11.4879,295083.0000,1,atc_et_prescripteurs
+melange_delai_fixe,24,78708.7500,9.7352,1.2725,243164.0000,21,atc_et_prescripteurs
+timestral_archives,24,98576.3333,12.1925,3.8516,309342.0000,21,atc_et_prescripteurs
+melange_archives,24,106439.3750,13.1651,7.9758,264164.0000,21,atc_et_prescripteurs
+saisonnier_archives,24,149833.2083,18.5323,12.1001,295083.0000,21,atc_et_prescripteurs

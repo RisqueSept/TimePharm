@@ -1,0 +1,15 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,periode,candidat_retenu
+timestral_60_mois,78,174619.0128,20.1065,4.9922,879447.0000,developpement,timestral_60_mois
+timestral_long,78,174831.3462,20.1310,5.4208,836055.0000,developpement,timestral_60_mois
+timestral_joint,78,178557.6410,20.5601,3.7050,866578.0000,developpement,timestral_60_mois
+timestral_jours_ouvres,78,182981.1410,21.0694,8.0762,943243.0000,developpement,timestral_60_mois
+timestral_total,78,187441.1795,21.5830,7.8492,939344.0000,developpement,timestral_60_mois
+saisonnier_ajuste,78,188042.1667,21.6522,6.2375,917875.0000,developpement,timestral_60_mois
+ridge_calendrier,78,192797.4236,22.1997,-1.2161,766304.6022,developpement,timestral_60_mois
+ridge_respiratoire,78,206610.3967,23.7902,-1.9510,728112.5615,developpement,timestral_60_mois
+mediane_saisonniere,78,209493.1859,24.1221,3.0437,902521.0000,developpement,timestral_60_mois
+saisonnier,78,213841.4744,24.6228,2.0107,898597.0000,developpement,timestral_60_mois
+timestral_60_mois,24,89797.0417,11.1066,-0.5594,345139.0000,verification,timestral_60_mois
+saisonnier_ajuste,24,90003.9167,11.1322,3.1043,186751.0000,verification,timestral_60_mois
+saisonnier,24,98341.9167,12.1635,7.6991,273842.0000,verification,timestral_60_mois
+timestral_courant,24,98892.0833,12.2316,1.4071,289813.0000,verification,timestral_60_mois

@@ -1,0 +1,6 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,periode,candidat_retenu
+melange,7,104524.5714,11.0907,-7.6442,236911.0000,developpement,melange
+calibre_sans_signal,7,135079.1429,14.3328,-13.0954,292884.0000,developpement,melange
+calibre_urgences,7,184897.8571,19.6189,-19.6189,363921.0000,developpement,melange
+calibre_sos,7,193454.2857,20.5267,-20.5267,413296.0000,developpement,melange
+melange,24,78708.7500,9.7352,1.2725,243164.0000,verification_reutilisee,melange

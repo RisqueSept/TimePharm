@@ -1,0 +1,8 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,periode,candidat_retenu
+biais_sans_calendrier,46,186195.1087,21.8179,-3.0339,685963.0000,developpement,biais_sans_calendrier
+biais_jours_ouvres,46,192987.7609,22.6138,-4.8679,677667.0000,developpement,biais_sans_calendrier
+melange,46,193869.5435,22.7172,3.4942,741292.0000,developpement,biais_sans_calendrier
+ratio_jours,46,195049.3261,22.8554,3.0822,741292.0000,developpement,biais_sans_calendrier
+biais_avec_ecole,46,195258.1739,22.8799,-4.8966,671694.0000,developpement,biais_sans_calendrier
+biais_sans_calendrier,24,74052.4167,9.1593,-3.9430,305835.0000,verification_reutilisee,biais_sans_calendrier
+melange,24,78708.7500,9.7352,1.2725,243164.0000,verification_reutilisee,biais_sans_calendrier

@@ -1,0 +1,6 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,periode,poids_timestral_retenu,dernier_mois_developpement
+melange_archives,48,251602.3333,31.1503,12.7045,719929.0000,developpement_documente,0.7500,2023-12
+timestral_archives,48,268788.8125,33.2781,9.6414,799995.0000,developpement_documente,0.7500,2023-12
+timestral_archives,24,98576.3333,12.1925,3.8516,309342.0000,verification_reutilisee,0.7500,2023-12
+melange_adapte_archives,24,99434.8750,12.2987,5.9137,266125.0000,verification_reutilisee,0.7500,2023-12
+melange_archives,24,106439.3750,13.1651,7.9758,264164.0000,verification_reutilisee,0.7500,2023-12

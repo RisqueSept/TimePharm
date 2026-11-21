@@ -1,0 +1,6 @@
+modele,n_mois,mae_boites,wape_pct,biais_pct,erreur_max_boites,scenario,poids_timestral_melange
+melange,24,78708.7500,9.7352,1.2725,243164.0000,delai_courant,0.5000
+timestral_60_mois,24,89797.0417,11.1066,-0.5594,345139.0000,delai_courant,0.5000
+saisonnier_ajuste,24,90003.9167,11.1322,3.1043,186751.0000,delai_courant,0.5000
+hypothese_delai_1,24,95306.7083,11.7881,-0.7573,380501.0000,volumes_plus_recents_simules,0.5000
+hypothese_delai_0,24,101732.2917,12.5829,-1.4001,514420.0000,volumes_plus_recents_simules,0.5000
