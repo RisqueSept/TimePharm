@@ -89,6 +89,14 @@ Au 21, le mélange obtient **13,00 %** avec les seules éditions ATC vérifiable
 
 En recalant les poids sur les 48 cibles documentées jusqu’à décembre 2023, le modèle choisit **75 % de Timestral** et **25 % de saisonnier ajusté**. Il descend à **12,30 %** sur les 24 mois de vérification réutilisés, avec une erreur maximale de 266 125 boîtes. Timestral seul a une WAPE légèrement plus basse (12,19 %) et une erreur maximale plus élevée (309 342 boîtes). Les deux réglages restent des candidats pour comparer moyenne et pics dès que des données réellement publiées à date seront disponibles sur une période de vérification indépendante. [Scores des poids](../outputs/recherche_pharma/scores_poids_archives.csv)
 
+## Seuils et métriques fixés a priori
+
+Avant tout prochain backtest, les décisions suivantes sont **figées** (elles ne doivent pas être réajustées après avoir vu les résultats ; toute exception doit être justifiée ici avant le run) :
+
+- **Seuil d'alerte tension = 0,5** (`src/seuils.py: SEUIL_ALERTE_RISQUE`), métriques : PR-AUC, détections à nombre de fausses alertes fixé (1, 2, 3), avec priorité aux **nouvelles dégradations** (départ en couverture acceptable ou satisfaisante).
+- **Volumes** : MAE, WAPE, biais signé et erreur max, calculés sur le total **et par forme**.
+- **Quantiles** : on rapporte la couverture empirique de la bande [q10, q90] (visée 80 %) par horizon, sans la « corriger » a posteriori.
+
 ## Feuille de route
 
 Les améliorations identifiées (tests anti-fuite temporelle, calibration mesurée, vrai délai de publication Medic’AM, période de vérification réservée, alertes actionnables, publication des tableaux de bord sur Vercel…) sont suivies dans [la roadmap](ROADMAP.md).
