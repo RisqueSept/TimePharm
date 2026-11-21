@@ -34,4 +34,4 @@ L’activité de référence 2025 est de **51,25 millions de journées**. À act
 
 La validation annuelle porte sur des horizons de **1 à 3 ans**. Les chiffres jusqu’en 2035 décrivent des scénarios au-delà de ces horizons. L’étude mensuelle mesure l’erreur à **1, 3, 6 et 12 mois**, avec peu de dates de départ à 12 mois.
 
-Voir [la documentation des données et des contrôles](docs/DATA.md) et [la passation pour reprendre les expérimentations](docs/PASSATION.md).
+Voir [la documentation des données et des contrôles](docs/DATA.md), [la passation pour reprendre les expérimentations](docs/PASSATION.md) et [la roadmap](docs/ROADMAP.md) (fiabilité, utilité, publication des tableaux de bord sur Vercel).

@@ -88,3 +88,7 @@ Le rejeu conservateur Medic’AM recense 30 éditions par classe ATC et utilise 
 Au 21, le mélange obtient **13,00 %** avec les seules éditions ATC vérifiables et **13,17 %** en ajoutant les éditions par prescripteur. Timestral seul obtient **12,19 %** dans le second scénario. Le score de **9,74 %** provient du scénario qui simule la disponibilité à deux mois. Ces écarts quantifient la sensibilité à la date des entrées. Commande `.venv-timestral/bin/python main_archives_pharma.py`. [Scores du rejeu](../outputs/recherche_pharma/scores_dates_archives.csv) · [Coupures et prévisions](../outputs/recherche_pharma/predictions_dates_archives.csv)
 
 En recalant les poids sur les 48 cibles documentées jusqu’à décembre 2023, le modèle choisit **75 % de Timestral** et **25 % de saisonnier ajusté**. Il descend à **12,30 %** sur les 24 mois de vérification réutilisés, avec une erreur maximale de 266 125 boîtes. Timestral seul a une WAPE légèrement plus basse (12,19 %) et une erreur maximale plus élevée (309 342 boîtes). Les deux réglages restent des candidats pour comparer moyenne et pics dès que des données réellement publiées à date seront disponibles sur une période de vérification indépendante. [Scores des poids](../outputs/recherche_pharma/scores_poids_archives.csv)
+
+## Feuille de route
+
+Les améliorations identifiées (tests anti-fuite temporelle, calibration mesurée, vrai délai de publication Medic’AM, période de vérification réservée, alertes actionnables, publication des tableaux de bord sur Vercel…) sont suivies dans [la roadmap](ROADMAP.md).
