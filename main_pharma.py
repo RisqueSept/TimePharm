@@ -33,6 +33,9 @@ def main():
     predictions.to_csv(out / "backtest_pharma.csv", index=False, float_format="%.6f")
     test_volumes.to_csv(out / "backtest_boites_pharma.csv", index=False)
     futur_volumes.to_csv(out / "previsions_boites_pharma.csv", index=False)
+    from src.manifest import ecrire_sidecar
+    for nom in ("backtest_pharma.csv", "backtest_boites_pharma.csv", "previsions_boites_pharma.csv"):
+        ecrire_sidecar(out / nom, root, run="pharma")
     fraicheur = metadonnees_fraicheur(stocks, volumes, manifest)
     generer_dashboard(out / "dashboard_pharma.html", stocks, ira, volumes, predictions,
                       test_volumes, futur_volumes, fraicheur=fraicheur)

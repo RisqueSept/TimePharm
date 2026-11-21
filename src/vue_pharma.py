@@ -46,3 +46,5 @@ def generer_dashboard(destination, stocks, ira, volumes, predictions, test_volum
     for key, content in replacements.items():
         template = template.replace(key, content, 1)
     destination.write_text(template, encoding="utf-8")
+    from .manifest import ecrire_sidecar
+    ecrire_sidecar(destination, Path(destination).parent.parent, run="pharma")

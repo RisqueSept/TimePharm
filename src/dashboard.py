@@ -145,5 +145,10 @@ def generer_html(dest, titre, accroche, donnees, note_projection, analyses, lien
     dest = Path(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(html, encoding="utf-8")
+    try:
+        from .manifest import ecrire_sidecar
+    except ImportError:  # import « plat » (sys.path contient src/)
+        from manifest import ecrire_sidecar
+    ecrire_sidecar(dest, dest.parent.parent, run="dashboard")
     print(f"[dashboard] -> {dest} ({dest.stat().st_size // 1024} Ko, HTML autonome)")
     return str(dest)

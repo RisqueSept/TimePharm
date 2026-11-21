@@ -87,3 +87,33 @@ def lire_manifest(racine):
         return json.loads(p.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return None
+
+
+def ecrire_sidecar(chemin_sortie, racine, run=None, extra=None):
+    """Écrit `<sortie>.json` à côté d'une sortie : date, révisions, hash du fichier, run.
+
+    Permet de répondre « avec quelles données/code ce fichier a-t-il été produit ? »
+    sans ouvrir le fichier.
+    """
+    try:
+        from .inference_timestral import MODELE, REVISION
+    except ImportError:
+        from inference_timestral import MODELE, REVISION
+    chemin_sortie = Path(chemin_sortie)
+    racine = Path(racine)
+    man = lire_manifest(racine) or {}
+    sidecar = {
+        "fichier": chemin_sortie.name,
+        "sha256": hasher_fichier(chemin_sortie) if chemin_sortie.is_file() else None,
+        "taille_octets": chemin_sortie.stat().st_size if chemin_sortie.is_file() else None,
+        "date_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "run": run or man.get("run"),
+        "modele": MODELE,
+        "revision_modele": REVISION,
+        "revision_code": man.get("revision_code") or revision_code(racine),
+    }
+    if extra:
+        sidecar.update(extra)
+    dest = chemin_sortie.with_suffix(chemin_sortie.suffix + ".json")
+    dest.write_text(json.dumps(sidecar, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return sidecar
