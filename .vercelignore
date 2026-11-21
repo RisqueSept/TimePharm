@@ -1,5 +1,6 @@
 # On ne publie que les tableaux de bord et sorties : tout le reste du dépôt
 # (data/raw, venvs, modèles) reste local.
 *
+!vercel.json
 !outputs/
 !outputs/**

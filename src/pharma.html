@@ -9,25 +9,16 @@
 <body>
 <header class="top">
   <div class="wrap nav">
-    <a class="brand" href="#haut"><span aria-hidden="true" class="brand-icon">↗</span> Prévisions santé</a>
-    <nav aria-label="Sections"><a href="#alertes">Alertes</a><a href="#backtest">Tensions</a><a href="#boites">Boîtes</a><a href="#signaux">Données</a><a href="#methode">Méthode</a></nav>
+    <a class="brand" href="/"><span aria-hidden="true" class="brand-icon">↗</span> TimePharm</a>
+    <nav class="dash-nav" aria-label="Tableaux de bord"><a href="/pharma" aria-current="page">Pharmacie</a><a href="/lits">Lits</a><a href="/mensuel">Activité mensuelle</a></nav>
   </div>
 </header>
 <main id="haut" class="wrap">
-  <aside class="fraicheur" aria-label="Fraîcheur des données et du modèle">
-    <span class="fraicheur-titre">Données à jour</span>
-    <dl>
-      <div><dt>Tableau généré le</dt><dd id="fresh-generation">—</dd></div>
-      <div><dt>Dernier relevé ANSM</dt><dd id="fresh-ansm">—</dd></div>
-      <div><dt>Dernier mois Medic’AM</dt><dd id="fresh-medicam">—</dd></div>
-      <div><dt>Révision du modèle</dt><dd id="fresh-revision">—</dd></div>
-    </dl>
-  </aside>
   <header class="hero">
     <div>
       <p class="eyebrow">France · Antibiotiques pédiatriques</p>
-      <h1>Disponibilité des<br>antibiotiques</h1>
-      <p>Prévisions de couverture des grossistes et de boîtes remboursées avec Timestral-209M de Mistral AI.</p>
+      <h1>Disponibilité<br>des antibiotiques</h1>
+      <p>Suivre les tensions chez les grossistes et anticiper les boîtes remboursées en pharmacie de ville.</p>
     </div>
     <dl class="hero-stats">
       <div><dt>Formes et dosages buvables</dt><dd id="product-count"></dd></div>
@@ -35,25 +26,70 @@
       <div><dt>Dernier relevé étudié</dt><dd id="last-report"></dd></div>
     </dl>
   </header>
+  <nav class="section-nav" aria-label="Sections pharmacie">
+    <a href="#previsions">Tensions à venir</a><a href="#boites">Boîtes prévues</a><a href="#backtest">Vérifier le modèle</a><a href="#signaux">Données et méthode</a>
+  </nav>
 
-  <section id="alertes" aria-labelledby="alertes-title">
+  <section id="previsions" aria-labelledby="future-title">
     <div class="section-head">
-      <div><h2 id="alertes-title">Alertes</h2><p>Prévisions hors échantillon dont le score de risque de Timestral-209M atteint le seuil d’alerte de <strong id="alertes-seuil"></strong> (fixé a priori). « Nouvelle dégradation » : la couverture des grossistes était encore suffisante au départ. « Tension connue » : l’insuffisance était déjà constatée au dernier relevé.</p></div>
+      <div><h2 id="future-title">Tensions à venir</h2><p>Risque de couverture insuffisante chez les grossistes, estimé par Timestral‑209M.</p></div>
+    </div>
+    <div class="forecast-controls">
+      <fieldset>
+        <legend>Échéance après publication du relevé</legend>
+        <div class="segmented" id="future-horizon">
+          <label><input type="radio" name="future-horizon" value="14" checked><span>14 jours</span></label>
+          <label><input type="radio" name="future-horizon" value="28"><span>28 jours</span></label>
+        </div>
+      </fieldset>
+      <div class="forecast-date" aria-live="polite"><span>Relevé visé autour du</span><strong id="future-date">—</strong></div>
+    </div>
+    <p id="future-summary" class="forecast-summary" aria-live="polite"></p>
+    <div class="risk-grid" id="future-cards"></div>
+    <div class="forecast-foot">
+      <p id="future-caption"></p>
+      <a class="button" href="previsions_tensions_pharma.csv" download>↓ Prévisions CSV</a>
+    </div>
+    <aside class="fraicheur" aria-label="Dates des sources et du calcul">
+      <dl>
+        <div><dt>Relevé de stocks · ANSM</dt><dd id="fresh-ansm">—</dd></div>
+        <div><dt>Boîtes observées jusqu’à</dt><dd id="fresh-medicam">—</dd></div>
+        <div><dt>Tableau généré le</dt><dd id="fresh-generation">—</dd></div>
+        <div><dt>Révision du modèle</dt><dd id="fresh-revision">—</dd></div>
+      </dl>
+    </aside>
+  </section>
+
+  <section id="boites" aria-labelledby="boxes-title">
+    <div class="section-head">
+      <div><h2 id="boxes-title">Boîtes remboursées prévues</h2><p>Prévisions mensuelles pour les six formes buvables délivrées en pharmacie de ville.</p></div>
+      <a class="button" href="previsions_boites_pharma.csv" download>↓ Prévisions CSV</a>
+    </div>
+    <div class="filters box-filters">
+      <label>Forme buvable<select id="box-product"></select></label>
+      <label>Horizon<select id="box-horizon"></select></label>
+    </div>
+    <div class="metrics" aria-live="polite">
+      <article><h3 id="box-target"></h3><strong id="box-timestral"></strong><p>Médiane de Timestral-209M</p></article>
+      <article><h3>Référence saisonnière</h3><strong id="box-seasonal"></strong><p>Même mois de l’année précédente</p></article>
+      <article><h3>Erreur moyenne · saisonnier</h3><strong id="box-error-seasonal"></strong><p id="box-test-count"></p></article>
+      <article><h3>Erreur moyenne · Timestral</h3><strong id="box-error-timestral"></strong><p>Écart absolu, en boîtes</p></article>
     </div>
     <div class="panel">
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Score de risque</th><th>Type d’alerte</th><th>Forme buvable</th><th>Horizon</th><th>Date de prévision</th><th>Relevé visé</th><th>Constaté au relevé</th></tr></thead>
-          <tbody id="alertes-rows"></tbody>
-        </table>
-      </div>
-      <p class="caption" id="alertes-caption"></p>
+      <div class="panel-title"><div><h3>Historique et prochains mois</h3><p id="box-last"></p></div></div>
+      <div id="box-forecast" class="chart" aria-label="Boîtes réellement remboursées et volumes prévus"></div>
     </div>
+    <div class="panel">
+      <div class="panel-title"><div><h3>Vérifier les prévisions mensuelles</h3><p>Le backtest respecte le calendrier des archives Medic’AM quand il est connu et applique une hypothèse de délai dans les autres cas.</p></div></div>
+      <div id="box-backtest" class="chart" aria-label="Backtest des volumes mensuels réellement remboursés"></div>
+      <p class="caption"><a href="backtest_boites_pharma.csv" download>Télécharger le backtest CSV ↓</a></p>
+    </div>
+    <p class="benchmark">Medic’AM mesure les remboursements. Les achats non remboursés et les besoins que les pharmacies n’ont pas pu satisfaire pendant une tension échappent à cette mesure.</p>
   </section>
 
   <section id="backtest" aria-labelledby="backtest-title">
     <div class="section-head">
-      <div><h2 id="backtest-title">Prévisions et relevés réels</h2><p>Timestral-209M estime le risque que la couverture des grossistes soit insuffisante à 14 ou 28 jours. Le relevé ANSM à cette échéance permet de vérifier la prévision.</p></div>
+      <div><h2 id="backtest-title">Vérifier le modèle sur le passé</h2><p>Le backtest rejoue les prévisions à des dates passées et les compare aux relevés ANSM qui ont suivi.</p></div>
       <a class="button" href="backtest_pharma.csv" download>↓ Télécharger le CSV</a>
     </div>
     <div class="filters">
@@ -66,7 +102,7 @@
     </div>
     <label class="check"><input id="new-only" type="checkbox"> Limiter aux départs où la couverture était encore suffisante</label>
     <div class="metrics" aria-live="polite">
-      <article><h3>Score de Brier</h3><strong id="brier"></strong><p id="brier-note"></p></article>
+      <article><h3>Erreur de probabilité (Brier)</h3><strong id="brier"></strong><p id="brier-note"></p></article>
       <article><h3>Cas détectés</h3><strong id="detected"></strong><p id="detected-note"></p></article>
       <article><h3>Fausses alertes</h3><strong id="false-alarms"></strong><p id="false-note"></p></article>
       <article><h3>Prévisions vérifiées</h3><strong id="sample"></strong><p id="sample-note"></p></article>
@@ -90,34 +126,29 @@
         </div>
       </details>
     </div>
+    <details id="alertes" class="panel historical-alerts">
+      <summary>Voir les alertes du backtest</summary>
+      <p class="caption">Le tableau reprend les scores historiques à partir de <strong id="alertes-seuil"></strong>. La dernière colonne indique ce que l’ANSM a ensuite observé.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Score de risque</th><th>Type d’alerte</th><th>Forme buvable</th><th>Horizon</th><th>Date de prévision</th><th>Relevé visé</th><th>Constaté au relevé</th></tr></thead>
+          <tbody id="alertes-rows"></tbody>
+        </table>
+      </div>
+      <p class="caption" id="alertes-caption"></p>
+    </details>
   </section>
 
-  <section id="boites" aria-labelledby="boxes-title">
-    <div class="section-head">
-      <div><h2 id="boxes-title">Combien de boîtes seront remboursées ?</h2><p>Prévisions mensuelles pour les six formes buvables, à partir des délivrances remboursées en pharmacie de ville.</p></div>
-      <a class="button" href="previsions_boites_pharma.csv" download>↓ Prévisions CSV</a>
+  <section id="suivi" aria-labelledby="suivi-title">
+    <div class="section-head"><div><h2 id="suivi-title">Suivi des prévisions publiées</h2><p>Les prévisions sont archivées à leur émission, puis comparées aux observations quand elles paraissent.</p></div></div>
+    <div class="metrics follow-metrics" aria-live="polite">
+      <article><h3>Tensions vérifiées</h3><strong id="suivi-tensions">—</strong><p id="suivi-tensions-note"></p></article>
+      <article><h3>Nouvelles tensions détectées</h3><strong id="suivi-detections">—</strong><p id="suivi-detections-note"></p></article>
+      <article><h3>Prévisions de boîtes vérifiées</h3><strong id="suivi-boites">—</strong><p id="suivi-boites-note"></p></article>
     </div>
-    <div class="filters box-filters">
-      <label>Forme buvable<select id="box-product"></select></label>
-      <label>Horizon<select id="box-horizon"></select></label>
-    </div>
-    <div class="metrics" aria-live="polite">
-      <article><h3 id="box-target"></h3><strong id="box-timestral"></strong><p>Médiane de Timestral-209M</p></article>
-      <article><h3>Référence saisonnière</h3><strong id="box-seasonal"></strong><p>Même mois de l’année précédente</p></article>
-      <article><h3>Erreur moyenne · saisonnier</h3><strong id="box-error-seasonal"></strong><p id="box-test-count"></p></article>
-      <article><h3>Erreur moyenne · Timestral</h3><strong id="box-error-timestral"></strong><p>Écart absolu, en boîtes</p></article>
-    </div>
-    <div class="panel">
-      <div class="panel-title"><div><h3>Historique et prochains mois</h3><p id="box-last"></p></div></div>
-      <div id="box-forecast" class="chart" aria-label="Boîtes réellement remboursées et volumes prévus"></div>
-    </div>
-    <div class="panel">
-      <div class="panel-title"><div><h3>Vérifier les prévisions mensuelles</h3><p>Chaque prévision est calculée avant le mois visé. Le backtest simule le délai de publication en utilisant les remboursements jusqu’à deux mois avant le mois de départ.</p></div></div>
-      <div id="box-backtest" class="chart" aria-label="Backtest des volumes mensuels réellement remboursés"></div>
-      <p class="caption"><a href="backtest_boites_pharma.csv" download>Télécharger le backtest CSV ↓</a></p>
-    </div>
-    <p class="benchmark">Medic’AM mesure les remboursements. Les achats non remboursés et les besoins que les pharmacies n’ont pas pu satisfaire pendant une tension échappent à cette mesure.</p>
+    <div class="follow-links"><a id="suivi-archive" hidden>Dernière archive ↗</a><a href="suivi_tensions_pharma.csv" download>Suivi des tensions ↓</a><a href="suivi_boites_pharma.csv" download>Suivi des boîtes ↓</a></div>
   </section>
+
 
   <section id="signaux" aria-labelledby="signals-title">
     <div class="section-head"><div><h2 id="signals-title">Données historiques</h2><p>Les relevés ANSM et les infections respiratoires alimentent le modèle. Les volumes Medic’AM sont affichés pour donner du contexte.</p></div></div>

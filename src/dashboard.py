@@ -56,6 +56,11 @@ def generer_html(dest, titre, accroche, donnees, note_projection, analyses, lien
         for h in donnees["horizons"]
     )
     modele_retenu = donnees["modele_retenu"]
+    actif = "/lits" if unite == "an" else "/mensuel"
+    navigation = "".join(
+        f'<a href="{route}"' + (' aria-current="page"' if route == actif else "") + f'>{label}</a>'
+        for route, label in (("/pharma", "Pharmacie"), ("/lits", "Lits"), ("/mensuel", "Activité mensuelle"))
+    )
     modeles = _options(
         (nom, label + (" · projection" if nom == modele_retenu else ""))
         for nom, label in donnees["modeles"].items()
@@ -83,15 +88,16 @@ def generer_html(dest, titre, accroche, donnees, note_projection, analyses, lien
 </head>
 <body>
   <header class="top"><div class="shell mast">
-    <a class="brand" href="#">Prévisions santé</a>
-    <nav aria-label="Navigation du tableau de bord">
+    <a class="brand" href="/">TimePharm</a>
+    <nav class="site-nav" aria-label="Tableaux de bord">{navigation}</nav>
+  </div></header>
+  <main class="shell">
+    <header class="intro"><h1>{escape(titre)}</h1><p>{escape(accroche)}</p></header>
+    <nav class="page-nav" aria-label="Sections">
       <a href="#comparaison">Réel et prédit</a>
       <a href="#projection">Projection</a>
       <a href="#contexte">Contexte et données</a>
-    </nav>
-  </div></header>
-  <main class="shell">
-    <header class="intro"><h1>{escape(titre)}</h1><p>{escape(accroche)}</p></header>{bandeau}
+    </nav>{bandeau}
 
     <section id="comparaison" class="panel" aria-labelledby="titre-comparaison">
       <div class="section-head">

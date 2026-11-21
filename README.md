@@ -28,6 +28,21 @@ Avec `--skip-fetch`, les scripts utilisent les archives de `data/raw/`. Sans cet
 Les tableaux Plotly sont des fichiers HTML autonomes, ouvrables hors ligne.
 Dans **Observé et prédit**, choisis un modèle et un horizon. Le tableau mensuel permet aussi de choisir la France entière ou une région. Les courbes, les écarts et le tableau des valeurs se mettent à jour ensemble.
 
+## Suivre les prévisions pharmacie
+
+La [page pharmacie publique](https://timepharm-mistral.vercel.app/pharma) ouvre sur les scores à 14 et 28 jours du dernier bulletin ANSM disponible. La page distingue le dernier état observé, les estimations à venir et le backtest. Les volumes concernent les **boîtes remboursées** en officine. Les dates de chaque source sont visibles dans le tableau.
+
+```bash
+.venv-timestral/bin/python -m timestral run pharma --refresh-sentinelles
+.venv-timestral/bin/python -m timestral test
+```
+
+Mettre à jour `data/raw/pharma/ansm_couverture.csv` à partir des nouveaux bulletins ANSM. À chaque nouvelle édition Medic’AM, mettre à jour les six séries de boîtes et les dates de publication des archives. L’option `--refresh-sentinelles` actualise l’incidence nationale IRA.
+
+La première émission de chaque journée est conservée dans `outputs/previsions_figees/`. Au prochain calcul, les CSV `suivi_tensions_pharma.csv` et `suivi_boites_pharma.csv` rapprochent les valeurs figées des relevés ANSM dans la fenêtre de ±3 jours ou des volumes Medic’AM du mois visé. Une observation manquante laisse la prévision en attente. L’évaluation utilise la première émission par cible, produit et horizon. Les résultats s’enrichissent à mesure que les sources publient de nouvelles observations.
+
+`scripts/publier.sh` régénère, teste et publie les fichiers statiques sur le projet Vercel lié. Le site ouvre sur la pharmacie et la navigation donne accès aux lits et à l’activité mensuelle. Le déploiement Git nécessite un auteur reconnu par la connexion GitHub du compte Vercel.
+
 ### Exemple MCO
 
 L’activité de référence 2025 est de **51,25 millions de journées**. À activité identique et avec une hypothèse d’occupation de 85 %, le calcul donne **165 190 équivalents de lits ouverts** en moyenne. Ce calcul sert à comparer des hypothèses. Pour dimensionner un service, il faut des données locales sur les pics d’activité, la capacité ouverte, les effectifs et les flux de patients.

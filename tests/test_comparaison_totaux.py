@@ -286,14 +286,13 @@ class BacktestsReelsTest(unittest.TestCase):
         self.assertTrue(np.isfinite(table.biais).all())
 
     def test_pharma_horizon_1_conforme_a_la_reference_publiee(self):
-        # docs/PASSATION.md : 51 mois à 1 mois, total des six formes,
-        # MAE = 114 336 boîtes et WAPE = 13,29 %
+        # docs/PASSATION.md : 46 mois à 1 mois avec le calendrier Medic'AM documenté.
         boites = pd.read_csv(RACINE / "outputs" / "backtest_boites_pharma.csv")
         mensuel = pd.read_csv(RACINE / "outputs" / "backtest_mensuel.csv")
         table = rapport(boites, mensuel)
         h1 = table.loc[(table.domaine == DOMAINE_PHARMA) & (table.horizon == 1)].iloc[0]
-        self.assertAlmostEqual(h1.mae, 114336.0, delta=500.0)
-        self.assertAlmostEqual(h1.wape, 13.29, delta=0.05)
+        self.assertAlmostEqual(h1.mae, 111650.0, delta=500.0)
+        self.assertAlmostEqual(h1.wape, 13.12, delta=0.05)
 
 
 if __name__ == "__main__":

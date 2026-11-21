@@ -1,0 +1,13 @@
+produit,observation_initiale,grossistes,source_initiale,horizon,origine,cible,timestral
+amox250,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,14,2026-11-20,2026-12-04,0.019819
+amox250,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,28,2026-11-20,2026-12-18,0.029502
+amox500,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,14,2026-11-20,2026-12-04,0.013557
+amox500,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,28,2026-11-20,2026-12-18,0.026920
+amoxclav,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,14,2026-11-20,2026-12-04,0.012599
+amoxclav,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,28,2026-11-20,2026-12-18,0.024980
+azithro,2026-11-13,1,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,14,2026-11-20,2026-12-04,0.000000
+azithro,2026-11-13,1,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,28,2026-11-20,2026-12-18,0.000000
+clarithro25,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,14,2026-11-20,2026-12-04,0.035252
+clarithro25,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,28,2026-11-20,2026-12-18,0.046995
+clarithro50,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,14,2026-11-20,2026-12-04,0.029949
+clarithro50,2026-11-13,2,https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf,28,2026-11-20,2026-12-18,0.030298

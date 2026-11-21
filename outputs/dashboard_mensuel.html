@@ -32,6 +32,11 @@ a:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px soli
 nav { display: flex; flex-wrap: wrap; gap: 6px 24px; }
 nav a { color: #e2eff1; font-size: 0.9rem; text-decoration: none; }
 nav a:hover { text-decoration: underline; }
+.site-nav { gap: 5px; }
+.site-nav a { padding: 6px 10px; border-radius: 7px; }
+.site-nav a[aria-current] { background: #ffffff20; color: white; }
+.page-nav { gap: 8px; margin-bottom: 20px; }
+.page-nav a { color: var(--teal); background: white; border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; font-weight: 650; }
 .intro { padding: 40px 0 25px; }
 h1, h2, h3, p { margin: 0; }
 h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.1; letter-spacing: -0.045em; }
@@ -89,16 +94,17 @@ th { color: var(--muted); font-weight: 650; }
 </head>
 <body>
   <header class="top"><div class="shell mast">
-    <a class="brand" href="#">Prévisions santé</a>
-    <nav aria-label="Navigation du tableau de bord">
+    <a class="brand" href="/">TimePharm</a>
+    <nav class="site-nav" aria-label="Tableaux de bord"><a href="/pharma">Pharmacie</a><a href="/lits">Lits</a><a href="/mensuel" aria-current="page">Activité mensuelle</a></nav>
+  </div></header>
+  <main class="shell">
+    <header class="intro"><h1>Occupation hospitalière avec le SARS-CoV-2</h1><p>Compare les observations et les valeurs prédites par région ou pour la France entière. La série couvre les patients positifs hospitalisés, tous motifs confondus.</p></header>
+    <nav class="page-nav" aria-label="Sections">
       <a href="#comparaison">Réel et prédit</a>
       <a href="#projection">Projection</a>
       <a href="#contexte">Contexte et données</a>
     </nav>
-  </div></header>
-  <main class="shell">
-    <header class="intro"><h1>Occupation hospitalière avec le SARS-CoV-2</h1><p>Compare les observations et les valeurs prédites par région ou pour la France entière. La série couvre les patients positifs hospitalisés, tous motifs confondus.</p></header>
-    <aside class="fraicheur" role="note" aria-label="Fraîcheur des données"><ul><li><span>Tableau généré le</span><strong>2026-11-21T21:14:42+00:00</strong></li><li><span>Révision du modèle</span><strong>—</strong></li><li><span>Dernier mois observé</span><strong>2025-06-01</strong></li></ul></aside>
+    <aside class="fraicheur" role="note" aria-label="Fraîcheur des données"><ul><li><span>Tableau généré le</span><strong>2026-11-21T23:36:20+00:00</strong></li><li><span>Révision du modèle</span><strong>9874d252ab0a</strong></li><li><span>Dernier mois observé</span><strong>2025-06-01</strong></li></ul></aside>
 
     <section id="comparaison" class="panel" aria-labelledby="titre-comparaison">
       <div class="section-head">

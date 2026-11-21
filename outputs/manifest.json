@@ -1,0 +1,25 @@
+{
+  "run": "pharma",
+  "date_utc": "2026-11-21T23:39:32+00:00",
+  "modele": "mistralai/Timestral-209M",
+  "revision_modele": "9874d252ab0aae16f7f7c999f98f98d6ad7d8365",
+  "revision_code": "07a0c7add4749814e1335a969ba6fc2bfe17b8ab",
+  "entrees": {
+    "data/raw/pharma/ansm_couverture.csv": "683cdf3eb73adc6d9c70cbd2c28205702c09d5510b97e760d4c40256bea87d85",
+    "data/raw/pharma/medicam_volumes.csv": "d615d5dc3978b483b2b632f975e24508d1050d2c0f1bbc8b2ce54b3869940212",
+    "data/raw/pharma/sentinelles_ira.csv": "46d78d2d1989ba5712c3615b267ac8cacc09ec48141df25a79c5c77a00ca9f1b",
+    "data/research/pharma/medicam_dates_archives.csv": "90bcf7011ead42408abb6bb7378553e36791fbf98ceb200fabb92136cea5e17f"
+  },
+  "parametres": {
+    "horizons_tensions_jours": [
+      14,
+      28
+    ],
+    "horizons_volumes_mois": [
+      1,
+      2,
+      3
+    ],
+    "delai_publication": "archives_documentées"
+  }
+}

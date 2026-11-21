@@ -11,7 +11,7 @@ from .seuils import SEUIL_ALERTE_RISQUE
 
 
 def generer_dashboard(destination, stocks, ira, volumes, predictions, test_volumes, futur_volumes,
-                      fraicheur=None):
+                      fraicheur=None, futur_tensions=None, suivi=None, archive=None):
     dossier = Path(__file__).resolve().parent
     colonnes = [
         "origine", "observation_initiale", "cible", "cible_disponible", "saison",
@@ -33,6 +33,9 @@ def generer_dashboard(destination, stocks, ira, volumes, predictions, test_volum
         "volumes_futur": enregistrements(futur_volumes),
         "predictions": enregistrements(predictions[colonnes]),
         "alertes": enregistrements(alertes[colonnes_alertes]),
+        "tensions_futur": enregistrements(futur_tensions) if futur_tensions is not None else [],
+        "suivi": suivi or {"tensions": [], "boites": []},
+        "archive": archive,
         "seuil_alerte": SEUIL_ALERTE_RISQUE,
         "fraicheur": fraicheur if fraicheur is not None else metadonnees_fraicheur(stocks, volumes, None),
     }

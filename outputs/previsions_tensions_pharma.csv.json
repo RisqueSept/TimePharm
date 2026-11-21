@@ -1,0 +1,10 @@
+{
+  "fichier": "previsions_tensions_pharma.csv",
+  "sha256": "f3da194cc820c2312a2b37d06b4c9926491a53413b5a439c586ed600fdc9583a",
+  "taille_octets": 1834,
+  "date_utc": "2026-11-21T23:39:37+00:00",
+  "run": "pharma",
+  "modele": "mistralai/Timestral-209M",
+  "revision_modele": "9874d252ab0aae16f7f7c999f98f98d6ad7d8365",
+  "revision_code": "07a0c7add4749814e1335a969ba6fc2bfe17b8ab"
+}

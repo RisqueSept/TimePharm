@@ -8,7 +8,7 @@ Commandes :
   test                           lance la suite de tests (unittest discover)
   recherche <nom> [args...]      expérience pharma : volumes, delai, signaux, calendrier,
                                  archives, familles (main_<nom>_pharma.py)
-  publier                        régénère tout + tests + push + déploiement Vercel
+  publier                        régénère tout + tests + déploiement Vercel
 """
 
 import argparse
@@ -75,7 +75,7 @@ def construire_parser():
     rech.add_argument("nom", choices=sorted(RECHERCHES))
     rech.add_argument("args", nargs=argparse.REMAINDER)
 
-    sous.add_parser("publier", help="régénère + teste + push + déploie sur Vercel")
+    sous.add_parser("publier", help="régénère + teste + déploie sur Vercel")
     return p
 
 

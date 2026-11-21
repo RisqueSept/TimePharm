@@ -319,6 +319,82 @@ function renderFraicheur() {
   }
 }
 
+function renderTensions() {
+  const horizon = Number(document.querySelector('input[name="future-horizon"]:checked').value);
+  const aujourdHui = new Intl.DateTimeFormat("sv-SE", {timeZone:"Europe/Paris"}).format(new Date());
+  const rows = data.tensions_futur.filter(row => row.horizon === horizon && row.cible.slice(0, 10) >= aujourdHui)
+    .sort((a, b) => b.timestral - a.timestral);
+  const seuil = data.seuil_alerte;
+  const alerts = rows.filter(row => row.timestral >= seuil);
+  const nouvelles = alerts.filter(row => row.grossistes > 0).length;
+  byId("future-date").textContent = rows.length ? formatDate(rows[0].cible) : "—";
+  byId("future-summary").textContent = rows.length
+    ? alerts.length + " sur " + rows.length + " au seuil d’alerte de " + percent.format(seuil)
+      + " · " + nouvelles + (nouvelles === 1 ? " nouvelle tension possible" : " nouvelles tensions possibles")
+    : "Aucune prévision à venir à cette échéance. Le prochain relevé ANSM permettra de relancer le calcul.";
+  byId("future-caption").textContent = rows.length
+    ? "Départ du calcul au " + formatDate(rows[0].origine)
+      + ". Le dernier état observé figure sous chaque score."
+    : "";
+  byId("future-cards").replaceChildren(...rows.map(row => {
+    const card = document.createElement("article");
+    const alerte = row.timestral >= seuil;
+    card.className = "risk-card" + (alerte ? " is-alert" : "");
+    const product = document.createElement("h3");
+    product.textContent = data.produits[row.produit];
+    const reading = document.createElement("div");
+    reading.className = "risk-reading";
+    const score = document.createElement("strong");
+    score.textContent = percent.format(row.timestral);
+    const flag = document.createElement("span");
+    flag.className = "badge " + (alerte ? (row.grossistes > 0 ? "badge-new" : "badge-known") : "badge-below");
+    flag.textContent = alerte
+      ? (row.grossistes > 0 ? "Nouvelle tension possible" : "Tension déjà observée")
+      : "Sous le seuil";
+    reading.append(score, flag);
+    const level = document.createElement("meter");
+    level.min = 0;
+    level.max = 1;
+    level.value = row.timestral;
+    level.setAttribute("aria-label", "Score de risque estimé");
+    const source = document.createElement("a");
+    source.href = row.source_initiale;
+    source.className = "risk-source";
+    source.textContent = "Relevé du " + formatDate(row.observation_initiale) + " · " + labels[row.grossistes] + " ↗";
+    card.append(product, reading, level, source);
+    return card;
+  }));
+}
+
+function renderSuivi() {
+  const {tensions, boites} = data.suivi;
+  const tensionVerifiees = tensions.filter(row => row.observe !== null);
+  const boitesVerifiees = boites.filter(row => row.observe !== null);
+  const nouvelles = tensionVerifiees.filter(row => row.grossistes > 0);
+  const cas = nouvelles.filter(row => row.observe === 1);
+  const detectees = cas.filter(row => row.timestral >= row.seuil).length;
+  const fausses = nouvelles.filter(row => row.observe === 0 && row.timestral >= row.seuil).length;
+  const sommeObservee = boitesVerifiees.reduce((sum, row) => sum + row.observe, 0);
+  const erreur = field => percent.format(boitesVerifiees.reduce(
+    (sum, row) => sum + Math.abs(row[field] - row.observe), 0
+  ) / sommeObservee);
+  byId("suivi-tensions").textContent = tensionVerifiees.length;
+  byId("suivi-tensions-note").textContent = (tensions.length - tensionVerifiees.length) + " en attente de relevé";
+  byId("suivi-detections").textContent = cas.length ? detectees + " / " + cas.length : "—";
+  byId("suivi-detections-note").textContent = nouvelles.length
+    ? fausses + " fausse(s) alerte(s) parmi les départs sans tension"
+    : "En attente des premières observations";
+  byId("suivi-boites").textContent = boitesVerifiees.length;
+  byId("suivi-boites-note").textContent = sommeObservee
+    ? "Erreur pondérée · Timestral " + erreur("timestral") + " · saisonnier ajusté " + erreur("ajuste")
+    : (boites.length - boitesVerifiees.length) + " en attente de publication Medic’AM";
+  if (data.archive) {
+    const lien = byId("suivi-archive");
+    lien.href = "previsions_figees/" + encodeURIComponent(data.archive);
+    lien.hidden = false;
+  }
+}
+
 function renderAlertes() {
   const seuil = data.seuil_alerte ?? 0.5;
   byId("alertes-seuil").textContent = percent.format(seuil);
@@ -376,9 +452,12 @@ function renderAll() {
 byId("horizon").addEventListener("change", () => renderBacktest(true));
 byId("new-only").addEventListener("change", () => renderBacktest(true));
 byId("threshold").addEventListener("input", () => renderBacktest(false));
+byId("future-horizon").addEventListener("change", renderTensions);
 ["box-product", "box-horizon"].forEach(id => byId(id).addEventListener("change", renderBoxes));
 compact.addEventListener("change", () => { renderAll(); renderBoxes(); });
 renderFraicheur();
+renderTensions();
+renderSuivi();
 renderAlertes();
 renderAll();
 renderBoxes();

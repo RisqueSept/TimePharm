@@ -5,7 +5,7 @@
   "buildCommand": "",
   "outputDirectory": "outputs",
   "rewrites": [
-    { "source": "/", "destination": "/dashboard_lits.html" },
+    { "source": "/", "destination": "/dashboard_pharma.html" },
     { "source": "/lits", "destination": "/dashboard_lits.html" },
     { "source": "/mensuel", "destination": "/dashboard_mensuel.html" },
     { "source": "/pharma", "destination": "/dashboard_pharma.html" }

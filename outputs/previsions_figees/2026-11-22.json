@@ -1,0 +1,353 @@
+{
+  "emis": "2026-11-22T00:37:08+01:00",
+  "modele": "mistralai/Timestral-209M",
+  "revision_modele": "9874d252ab0aae16f7f7c999f98f98d6ad7d8365",
+  "revision_code": "07a0c7add4749814e1335a969ba6fc2bfe17b8ab",
+  "entrees": {
+    "data/raw/pharma/ansm_couverture.csv": "683cdf3eb73adc6d9c70cbd2c28205702c09d5510b97e760d4c40256bea87d85",
+    "data/raw/pharma/medicam_volumes.csv": "d615d5dc3978b483b2b632f975e24508d1050d2c0f1bbc8b2ce54b3869940212",
+    "data/raw/pharma/sentinelles_ira.csv": "46d78d2d1989ba5712c3615b267ac8cacc09ec48141df25a79c5c77a00ca9f1b",
+    "data/research/pharma/medicam_dates_archives.csv": "90bcf7011ead42408abb6bb7378553e36791fbf98ceb200fabb92136cea5e17f"
+  },
+  "seuil": 0.5,
+  "tensions": [
+    {
+      "produit": "amox250",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 14,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-04T00:00:00.000",
+      "timestral": 0.0198194369
+    },
+    {
+      "produit": "amox250",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 28,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-18T00:00:00.000",
+      "timestral": 0.0295018303
+    },
+    {
+      "produit": "amox500",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 14,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-04T00:00:00.000",
+      "timestral": 0.0135571128
+    },
+    {
+      "produit": "amox500",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 28,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-18T00:00:00.000",
+      "timestral": 0.0269200097
+    },
+    {
+      "produit": "amoxclav",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 14,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-04T00:00:00.000",
+      "timestral": 0.0125985764
+    },
+    {
+      "produit": "amoxclav",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 28,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-18T00:00:00.000",
+      "timestral": 0.0249798303
+    },
+    {
+      "produit": "azithro",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 1,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 14,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-04T00:00:00.000",
+      "timestral": 0.0
+    },
+    {
+      "produit": "azithro",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 1,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 28,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-18T00:00:00.000",
+      "timestral": 0.0
+    },
+    {
+      "produit": "clarithro25",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 14,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-04T00:00:00.000",
+      "timestral": 0.0352522546
+    },
+    {
+      "produit": "clarithro25",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 28,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-18T00:00:00.000",
+      "timestral": 0.0469948637
+    },
+    {
+      "produit": "clarithro50",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 14,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-04T00:00:00.000",
+      "timestral": 0.0299486647
+    },
+    {
+      "produit": "clarithro50",
+      "observation_initiale": "2026-11-13T00:00:00.000",
+      "grossistes": 2,
+      "source_initiale": "https://ansm.sante.fr/uploads/2026/11/20/20261120-plan-hivernal-situation-13-11-2026.pdf",
+      "horizon": 28,
+      "origine": "2026-11-20T00:00:00.000",
+      "cible": "2026-12-18T00:00:00.000",
+      "timestral": 0.0302983599
+    }
+  ],
+  "boites": [
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2026-12-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 1,
+      "saisonnier": 337874,
+      "ajuste": 317216,
+      "produit": "amox250",
+      "timestral_q10": 186310,
+      "timestral": 311688,
+      "timestral_q90": 493166
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-01-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 2,
+      "saisonnier": 211085,
+      "ajuste": 198179,
+      "produit": "amox250",
+      "timestral_q10": 148708,
+      "timestral": 229091,
+      "timestral_q90": 343407
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-02-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 3,
+      "saisonnier": 211671,
+      "ajuste": 198729,
+      "produit": "amox250",
+      "timestral_q10": 140794,
+      "timestral": 214648,
+      "timestral_q90": 314470
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2026-12-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 1,
+      "saisonnier": 727679,
+      "ajuste": 724653,
+      "produit": "amox500",
+      "timestral_q10": 314682,
+      "timestral": 600899,
+      "timestral_q90": 793009
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-01-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 2,
+      "saisonnier": 431604,
+      "ajuste": 429809,
+      "produit": "amox500",
+      "timestral_q10": 312254,
+      "timestral": 460059,
+      "timestral_q90": 641753
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-02-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 3,
+      "saisonnier": 459675,
+      "ajuste": 457763,
+      "produit": "amox500",
+      "timestral_q10": 314828,
+      "timestral": 453607,
+      "timestral_q90": 615420
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2026-12-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 1,
+      "saisonnier": 248069,
+      "ajuste": 262368,
+      "produit": "amoxclav",
+      "timestral_q10": 201070,
+      "timestral": 281320,
+      "timestral_q90": 356718
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-01-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 2,
+      "saisonnier": 170249,
+      "ajuste": 180062,
+      "produit": "amoxclav",
+      "timestral_q10": 140711,
+      "timestral": 204454,
+      "timestral_q90": 282358
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-02-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 3,
+      "saisonnier": 193417,
+      "ajuste": 204565,
+      "produit": "amoxclav",
+      "timestral_q10": 149727,
+      "timestral": 211818,
+      "timestral_q90": 285483
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2026-12-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 1,
+      "saisonnier": 55529,
+      "ajuste": 49508,
+      "produit": "azithro",
+      "timestral_q10": 36329,
+      "timestral": 57171,
+      "timestral_q90": 81946
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-01-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 2,
+      "saisonnier": 35951,
+      "ajuste": 32053,
+      "produit": "azithro",
+      "timestral_q10": 24355,
+      "timestral": 36398,
+      "timestral_q90": 54533
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-02-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 3,
+      "saisonnier": 37735,
+      "ajuste": 33643,
+      "produit": "azithro",
+      "timestral_q10": 24655,
+      "timestral": 35362,
+      "timestral_q90": 50598
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2026-12-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 1,
+      "saisonnier": 6105,
+      "ajuste": 6016,
+      "produit": "clarithro25",
+      "timestral_q10": 2903,
+      "timestral": 6899,
+      "timestral_q90": 13770
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-01-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 2,
+      "saisonnier": 3578,
+      "ajuste": 3526,
+      "produit": "clarithro25",
+      "timestral_q10": 2100,
+      "timestral": 4056,
+      "timestral_q90": 7376
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-02-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 3,
+      "saisonnier": 3784,
+      "ajuste": 3729,
+      "produit": "clarithro25",
+      "timestral_q10": 2151,
+      "timestral": 3758,
+      "timestral_q90": 6260
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2026-12-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 1,
+      "saisonnier": 9128,
+      "ajuste": 9160,
+      "produit": "clarithro50",
+      "timestral_q10": 5398,
+      "timestral": 9811,
+      "timestral_q90": 18553
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-01-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 2,
+      "saisonnier": 5668,
+      "ajuste": 5688,
+      "produit": "clarithro50",
+      "timestral_q10": 4319,
+      "timestral": 6063,
+      "timestral_q90": 8881
+    },
+    {
+      "origine": "2026-11-01T00:00:00.000",
+      "mois": "2027-02-01T00:00:00.000",
+      "dernier_mois_utilise": "2026-08-01T00:00:00.000",
+      "horizon": 3,
+      "saisonnier": 5911,
+      "ajuste": 5931,
+      "produit": "clarithro50",
+      "timestral_q10": 3918,
+      "timestral": 5490,
+      "timestral_q90": 7564
+    }
+  ]
+}

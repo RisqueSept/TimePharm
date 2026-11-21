@@ -1,0 +1,10 @@
+{
+  "fichier": "dashboard_lits.html",
+  "sha256": "fd0db728095ae90b807090aed4a04136c1bd09405c43d679d302c06d5dd23c9c",
+  "taille_octets": 4852547,
+  "date_utc": "2026-11-21T23:37:06+00:00",
+  "run": "dashboard",
+  "modele": "mistralai/Timestral-209M",
+  "revision_modele": "9874d252ab0aae16f7f7c999f98f98d6ad7d8365",
+  "revision_code": "07a0c7add4749814e1335a969ba6fc2bfe17b8ab"
+}

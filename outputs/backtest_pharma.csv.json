@@ -1,0 +1,10 @@
+{
+  "fichier": "backtest_pharma.csv",
+  "sha256": "93c08bef47752849ab182655ea3c0c0a982fbaf39fe00a3a9434203554a56ad1",
+  "taille_octets": 195594,
+  "date_utc": "2026-11-21T23:39:37+00:00",
+  "run": "pharma",
+  "modele": "mistralai/Timestral-209M",
+  "revision_modele": "9874d252ab0aae16f7f7c999f98f98d6ad7d8365",
+  "revision_code": "07a0c7add4749814e1335a969ba6fc2bfe17b8ab"
+}

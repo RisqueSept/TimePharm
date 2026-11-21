@@ -26,6 +26,11 @@ a:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px soli
 nav { display: flex; flex-wrap: wrap; gap: 6px 24px; }
 nav a { color: #e2eff1; font-size: 0.9rem; text-decoration: none; }
 nav a:hover { text-decoration: underline; }
+.site-nav { gap: 5px; }
+.site-nav a { padding: 6px 10px; border-radius: 7px; }
+.site-nav a[aria-current] { background: #ffffff20; color: white; }
+.page-nav { gap: 8px; margin-bottom: 20px; }
+.page-nav a { color: var(--teal); background: white; border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; font-weight: 650; }
 .intro { padding: 40px 0 25px; }
 h1, h2, h3, p { margin: 0; }
 h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.1; letter-spacing: -0.045em; }

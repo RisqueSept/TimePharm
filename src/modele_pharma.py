@@ -146,15 +146,15 @@ def backtest(stocks, ira):
     return pd.concat(blocs, ignore_index=True)
 
 
-def previsions_timestral(stocks, ira, backtest, moteur):
+def previsions_timestral(stocks, ira, points, moteur):
     """Prévoit l'indicateur de couverture insuffisante sur une grille hebdomadaire."""
     dates_releves = stocks.observation.dt.to_period("W-SUN")
     dates_ira = ira.semaine.dt.to_period("W-SUN")
     resultats = []
-    for origine, lignes in backtest.groupby("origine", sort=True):
+    for origine, lignes in points.groupby("origine", sort=True):
         publications = stocks.loc[stocks.disponible.le(origine)].assign(semaine=dates_releves)
         publications = publications.sort_values("observation").drop_duplicates(["semaine", "produit"], keep="last")
-        dates = pd.period_range(dates_releves.min(), origine.to_period("W-SUN"), freq="W-SUN")
+        dates = pd.period_range(publications.semaine.min(), origine.to_period("W-SUN"), freq="W-SUN")
         grille = publications.set_index(["semaine", "produit"]).unstack("produit")
         produits = lignes.produit.unique()
         grille = grille.reindex(index=dates, columns=pd.MultiIndex.from_product(
@@ -180,6 +180,26 @@ def previsions_timestral(stocks, ira, backtest, moteur):
         ]
         resultats.append(lignes.assign(timestral=valeurs))
     return pd.concat(resultats).sort_index()
+
+
+def prevoir_tensions(stocks, ira, date_generation, moteur):
+    """Prévoit aux dates fixes J+14 et J+28 à partir du dernier bulletin disponible."""
+    connus = stocks.loc[stocks.disponible.le(date_generation)]
+    if connus.empty:
+        return pd.DataFrame()
+    origine = connus.disponible.max()
+    bulletin = connus.loc[connus.disponible.eq(origine) & connus.grossistes.notna(), [
+        "produit", "observation", "grossistes", "source",
+    ]].sort_values("observation").drop_duplicates("produit", keep="last")
+    if bulletin.empty:
+        return pd.DataFrame()
+    bulletin = bulletin.rename(columns={"observation": "observation_initiale", "source": "source_initiale"})
+    points = bulletin.merge(pd.DataFrame({"horizon": HORIZONS}), how="cross")
+    points["origine"] = origine
+    points["cible"] = origine + pd.to_timedelta(points.horizon, unit="D")
+    # Le backtest admet un décalage de trois jours autour de chaque cible.
+    points = points.loc[points.cible - pd.Timedelta(days=3) > date_generation]
+    return previsions_timestral(stocks, ira, points, moteur) if len(points) else points
 
 
 def alertes_actionnables(df_predictions, seuil=SEUIL_ALERTE_RISQUE, colonne_score="timestral"):
