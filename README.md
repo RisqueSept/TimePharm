@@ -41,7 +41,7 @@ Mettre à jour `data/raw/pharma/ansm_couverture.csv` à partir des nouveaux bull
 
 La première émission de chaque journée est conservée dans `outputs/previsions_figees/`. Au prochain calcul, les CSV `suivi_tensions_pharma.csv` et `suivi_boites_pharma.csv` rapprochent les valeurs figées des relevés ANSM dans la fenêtre de ±3 jours ou des volumes Medic’AM du mois visé. Une observation manquante laisse la prévision en attente. L’évaluation utilise la première émission par cible, produit et horizon. Les résultats s’enrichissent à mesure que les sources publient de nouvelles observations.
 
-`scripts/publier.sh` régénère, teste et publie les fichiers statiques sur le projet Vercel lié. Le site ouvre sur la pharmacie et la navigation donne accès aux lits et à l’activité mensuelle. Le déploiement Git nécessite un auteur reconnu par la connexion GitHub du compte Vercel.
+`scripts/publier.sh` régénère, teste et publie les fichiers statiques sur le projet Vercel lié. Le site ouvre sur la pharmacie et la navigation donne accès aux lits et à l’activité mensuelle. Une mise à jour de la branche `mistral` publie automatiquement les sorties versionnées si Vercel reconnaît l’auteur du commit.
 
 ### Exemple MCO
 

@@ -10,6 +10,7 @@ if [[ "${1:-}" != "--sorties-existantes" ]]; then
   "$PY" main.py --skip-fetch
   "$PY" main_mensuel.py --skip-fetch
   "$PY" main_pharma.py --refresh-sentinelles
+  "$PY" -m src.comparaison_totaux
   "$PY" -m unittest discover -s tests
 fi
 

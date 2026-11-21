@@ -13,7 +13,7 @@ Les trois dashboards (`outputs/dashboard_lits.html`, `dashboard_mensuel.html`, `
 - [x] **Déployé** : projet `risced/timepharm-mistral`, repo `RisqueSept/TimePharm` connecté, Production Branch = `mistral`, Framework = Other, Output = `outputs`. URL : **https://timepharm-mistral.vercel.app** (`/`, `/lits`, `/mensuel`, `/pharma` + tous les CSV/PNG de `outputs/` vérifiés en 200). `.vercelignore` : seul `outputs/` est publié.
 - [x] Procédure de mise à jour : `./scripts/publier.sh` (régénère les trois dashboards, actualise Sentinelles, lance les tests et déploie les sorties statiques via la CLI).
 - [x] Vérifié en ligne : dashboards et CSV répondent 200, titre de page conforme.
-- [ ] Déploiement **auto à chaque push**. Vercel bloque les commits dont il ne reconnaît pas l’auteur. Associer `RisqueSept` dans les connexions du compte Vercel et utiliser une adresse de commit associée à GitHub. Le déploiement via la CLI reste disponible.
+- [x] Déploiement **auto sur la branche `mistral`**, vérifié avec le commit `b046198`. Le dépôt local utilise l’adresse GitHub `noreply` du compte `RisqueSept`. Le déploiement statique via la CLI reste disponible.
 
 Le [tableau pharmacie](https://timepharm-mistral.vercel.app/pharma) sépare les tensions à venir, les boîtes prévues, le backtest et le suivi des émissions archivées. Le suivi prospectif commence avec les archives figées du 22 novembre 2026. Il reste à actualiser les relevés ANSM et les éditions Medic’AM à leur parution, puis à évaluer les nouvelles observations avant d’élargir à d’autres médicaments.
 - [x] (Optionnel) domaine personnalisé dans les réglages Vercel.
