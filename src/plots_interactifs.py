@@ -6,6 +6,13 @@ import pandas as pd
 
 from dashboard import MODELES, enregistrements, fraicheur_dashboard, generer_html
 
+try:  # import « package » (src.plots_interactifs)
+    from .plots_mensuel import (DELAI_VALIDATION, est_hors_validation, limite_validation,
+                               marquer_hors_validation, note_hors_validation)
+except ImportError:  # import « plat » (sys.path contient src/)
+    from plots_mensuel import (DELAI_VALIDATION, est_hors_validation, limite_validation,
+                              marquer_hors_validation, note_hors_validation)
+
 BASE = Path(__file__).resolve().parents[1]
 PROCESSED = BASE / "data" / "processed"
 OUT = BASE / "outputs"
@@ -75,8 +82,10 @@ def generer_dashboard() -> str:
     scenarios = pd.read_csv(OUT / "scenarios_capacite_mco.csv")
 
     territoire = "France"
+    dernier_annee = int(hist.annee.max())
     historique = hist[["annee", "lits_total"]].rename(columns={"annee": "date", "lits_total": "lits_pred"})
     projection = prev[["annee", "lits_pred", "scenario_bas", "scenario_haut"]].rename(columns={"annee": "date"})
+    serie = pd.concat([historique.assign(est_prevision=0), projection.assign(est_prevision=1)])
     donnees = {
         "territoire_defaut": territoire, "territoires": [],
         "unite_horizon": "an", "horizons": sorted(bt.horizon_ans.unique().tolist()),
@@ -86,9 +95,7 @@ def generer_dashboard() -> str:
             int(h): enregistrements(groupe.rename(columns={"annee": "date"}))
             for h, groupe in bt.groupby("horizon_ans")
         }},
-        "projections": {territoire: enregistrements(pd.concat([
-            historique.assign(est_prevision=0), projection.assign(est_prevision=1)
-        ]))},
+        "projections": {territoire: marquer_hors_validation(enregistrements(serie), dernier_annee, "an")},
         "contexte": _contexte(hist, prev, scenarios),
     }
     analyses = f"""
@@ -107,11 +114,14 @@ def generer_dashboard() -> str:
         <div id="demographie-chart" class="chart" role="img" aria-label="Lits pour 1 000 habitants et part des 75 ans et plus"></div>
       </article>
     """
+    note = (f"La médiane de Timestral-209M est prolongée jusqu’en {int(prev.annee.max())}. "
+            "La bande montre ses quantiles 10 % et 90 %. "
+            + note_hors_validation(dernier_annee, "an"))
     return generer_html(
         OUT / "dashboard_lits.html", "Capacité hospitalière en France",
         "Lits d’hospitalisation complète recensés par la DREES. Les scénarios MCO permettent aussi de comparer la capacité projetée et la charge selon l’activité.",
         donnees,
-        "La médiane de Timestral-209M est prolongée jusqu’en 2035. La bande montre ses quantiles 10 % et 90 %. Le backtest couvre les horizons de 1 à 3 ans.",
+        note,
         analyses,
         [("backtest_predictions.csv", "Backtest annuel (CSV)"),
          ("prediction_lits_2026_2035.csv", "Projection nationale (CSV)"),

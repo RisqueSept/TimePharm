@@ -72,3 +72,10 @@ th { color: var(--muted); font-weight: 650; }
 .fraicheur li { display: flex; flex-direction: column; }
 .fraicheur li span { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #5a6b8c; }
 .fraicheur li strong { font-size: 14px; }
+
+/* Légende « hors validation » des projections (chantier #13) */
+.legende-projection { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 6px; font-size: .86rem; color: var(--muted); }
+.legende-projection .chip { display: inline-flex; align-items: center; gap: 7px; }
+.legende-projection .chip::before { content: ""; width: 26px; border-top: 3px dashed #245bba; border-radius: 2px; }
+.legende-projection .chip-hors-validation { color: #7d90a0; }
+.legende-projection .chip-hors-validation::before { opacity: .35; }

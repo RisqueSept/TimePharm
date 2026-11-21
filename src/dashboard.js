@@ -43,7 +43,7 @@ function axeLits(titre) {
   return { title: { text: titre, font: { size: 12 } }, tickformat: "~s", gridcolor: couleur.grille, automargin: true };
 }
 
-function ligne(rows, cle, nom, color, tirets, alt = null) {
+function ligne(rows, cle, nom, color, tirets, alt = null, opacite = 1) {
   return {
     type: "scatter", mode: "lines+markers", name: nom,
     x: rows.map(row => row.date), y: rows.map(row => row[cle]),
@@ -54,9 +54,41 @@ function ligne(rows, cle, nom, color, tirets, alt = null) {
     ]),
     line: { color, width: 2.7, dash: tirets },
     marker: { size: 6 },
+    opacity: opacite,
     hovertemplate: "<b>%{customdata[0]}</b><br>%{fullData.name} · %{customdata[1]} lits" +
       (alt || "") + "<extra></extra>",
   };
+}
+
+// Chantier #13 : horizons hors validation (au-delà de l'horizon du backtest).
+const DELAI_VALIDATION = { an: 3, mois: 12 };
+
+function estHorsValidation(date, derniere, unite, delai) {
+  if (unite === "an") {
+    const d = typeof date === "number" ? date : new Date(date).getUTCFullYear();
+    const o = typeof derniere === "number" ? derniere : new Date(derniere).getUTCFullYear();
+    return d - o > delai;
+  }
+  const d = new Date(date), o = new Date(derniere);
+  return (d.getUTCFullYear() - o.getUTCFullYear()) * 12 + (d.getUTCMonth() - o.getUTCMonth()) > delai;
+}
+
+function legendeHorsValidation(afficher) {
+  let legende = document.getElementById("legende-projection");
+  if (!legende) {
+    legende = document.createElement("p");
+    legende.id = "legende-projection";
+    legende.className = "legende-projection";
+    const valide = document.createElement("span");
+    valide.className = "chip";
+    valide.textContent = "dans l’horizon de validation";
+    const hors = document.createElement("span");
+    hors.className = "chip chip-hors-validation";
+    hors.textContent = "hors validation";
+    legende.append(valide, hors);
+    element("projection-contexte").after(legende);
+  }
+  legende.style.display = afficher ? "" : "none";
 }
 
 function diagrammeComparaison() {
@@ -118,19 +150,39 @@ function diagrammeProjection() {
   const obs = rows.filter(row => !row.est_prevision);
   const futurs = rows.filter(row => row.est_prevision);
   const derniereDate = obs.at(-1).date;
+  const delai = DELAI_VALIDATION[data.unite_horizon] ?? 3;
+  const hors = row => row.hors_validation != null
+    ? Number(row.hors_validation) === 1
+    : estHorsValidation(row.date, derniereDate, data.unite_horizon, delai);
+  const valides = futurs.filter(row => !hors(row));
+  const horsValidation = futurs.filter(hors);
   const traces = [];
-  if (futurs[0]?.scenario_bas != null) {
-    const x = futurs.map(row => row.date);
-    const bande = { type: "scatter", mode: "lines", line: { width: 0 }, x, hoverinfo: "skip" };
-    traces.push({ ...bande, y: futurs.map(row => row.scenario_haut), showlegend: false });
-    traces.push({ ...bande, y: futurs.map(row => row.scenario_bas), fill: "tonexty",
-      fillcolor: "rgba(36, 91, 186, 0.14)", name: "Timestral · quantiles 10–90 %" });
-  }
+  const bande = (segment, opacite, nom) => {
+    if (!segment.length || segment[0].scenario_bas == null) return [];
+    const base = {
+      type: "scatter", mode: "lines", line: { width: 0 }, hoverinfo: "skip",
+      x: segment.map(row => row.date), opacity: opacite,
+    };
+    return [
+      { ...base, y: segment.map(row => row.scenario_haut), showlegend: false },
+      { ...base, y: segment.map(row => row.scenario_bas), fill: "tonexty",
+        fillcolor: "rgba(36, 91, 186, 0.14)", name: nom },
+    ];
+  };
+  traces.push(...bande(valides, 1, "Timestral · quantiles 10–90 %"));
+  traces.push(...bande(horsValidation, 0.35, "Quantiles 10–90 % · hors validation"));
   traces.push(ligne(obs, "lits_pred", "Observé", couleur.observe, "solid"));
-  traces.push(ligne(futurs, "lits_pred", "Projection", couleur.predit, "dash"));
+  if (valides.length) traces.push(ligne(valides, "lits_pred", "Projection", couleur.predit, "dash"));
+  if (horsValidation.length) {
+    traces.push(ligne(horsValidation, "lits_pred", "Projection · hors validation", couleur.predit, "dash", null, 0.35));
+  }
   element("projection-contexte").textContent =
     "Dernière observation en " + formatDate(derniereDate) +
-    " · Modèle de projection : " + data.modeles[data.modele_retenu];
+    " · Modèle de projection : " + data.modeles[data.modele_retenu] +
+    (horsValidation.length
+      ? " · au-delà de " + formatDate(horsValidation[0].date) + " : hors validation (grisé)"
+      : "");
+  legendeHorsValidation(horsValidation.length > 0);
   const temps = axesTemps();
   delete temps.dtick;
   Plotly.react(element("projection-chart"), traces, {
