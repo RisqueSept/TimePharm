@@ -3,14 +3,21 @@
 from pathlib import Path
 
 from src.inference_timestral import MistralTimestral
-from src.modele_pharma import backtest, charger_donnees, previsions_timestral
-from src.modele_volumes_pharma import prevoir_volumes
+from src.manifest import ecrire_manifest
+from src.modele_pharma import HORIZONS, backtest, charger_donnees, previsions_timestral
+from src.modele_volumes_pharma import DELAI_MOIS, HORIZONS_VOLUMES, prevoir_volumes
 from src.vue_pharma import generer_dashboard
 
 
 def main():
     root = Path(__file__).resolve().parent
-    stocks, ira, volumes = charger_donnees(root / "data" / "raw" / "pharma")
+    dossier = root / "data" / "raw" / "pharma"
+    stocks, ira, volumes = charger_donnees(dossier)
+    ecrire_manifest(root, "pharma", sorted(dossier.glob("*.csv")), {
+        "horizons_tensions_jours": list(HORIZONS),
+        "horizons_volumes_mois": list(HORIZONS_VOLUMES),
+        "delai_publication_mois": DELAI_MOIS,
+    })
     moteur = MistralTimestral()
     print("Backtest hebdomadaire avec Timestral-209M")
     predictions = previsions_timestral(stocks, ira, backtest(stocks, ira), moteur)

@@ -17,6 +17,8 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
+import manifest
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -30,6 +32,12 @@ def main():
         fetch_mensuel.fetch_all()
     else:
         print("=== 0. Fetch sauté (--skip-fetch) ===")
+    racine = os.path.dirname(os.path.abspath(__file__))
+    entrees = manifest.entrees_dossier(os.path.join(racine, "data", "raw", "mensuel"))
+    zip_insee = os.path.join(racine, "data", "raw", "insee_pop_struct_series.zip")
+    if os.path.exists(zip_insee):
+        entrees.append(zip_insee)
+    manifest.ecrire_manifest(racine, "mensuel", entrees, {"skip_fetch": args.skip_fetch})
 
     import table_mensuelle
     import modele_mensuel

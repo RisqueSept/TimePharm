@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 import fetch_data
 import extract_lits
+import manifest
 import modele_lits
 import plots_interactifs
 from inference_timestral import MistralTimestral
@@ -32,6 +33,9 @@ def main():
         sae = extract_lits.archives_locales()
     else:
         sae, _ = fetch_data.fetch_all()
+    manifest.ecrire_manifest(os.path.dirname(os.path.abspath(__file__)), "lits",
+                             sorted(str(v) for v in sae.values()),
+                             {"skip_fetch": args.skip_fetch})
 
     print("\n=== 1. Extraction des lits (SAE) ===")
     extract_lits.extract_all(sae)

@@ -4,13 +4,14 @@ Objectif : rendre les résultats **démontrables** (fiabilité) et **utilisables
 
 Suivi : goal actif de la session + cases à cocher ci-dessous.
 
-## Phase 0 — Publication des dashboards (Vercel)
+## Phase 0 — Publication des dashboards (Vercel) — Option A retenue
 
 Les trois dashboards (`outputs/dashboard_lits.html`, `dashboard_mensuel.html`, `dashboard_pharma.html`, 4,6–5,4 Mo chacun) sont des fichiers HTML **autonomes** (Plotly embarqué) : un hébergement 100 % statique suffit, Vercel est adapté (gratuit en Hobby).
 
-- [ ] `vercel.json` à la racine (réécritures `/`, `/lits`, `/mensuel`, `/pharma` vers `outputs/`) — fait à la création de cette roadmap.
-- [ ] Déployer : Option A (recommandé) import du dépôt git dans Vercel (vercel.com/new), aucun build, chaque push sur `main` redéploie ; Option B (immédiat, sans git) `npm i -g vercel && vercel login` puis `vercel --prod` depuis `outputs/`.
-- [ ] Procédure de mise à jour documentée : régénérer les HTML (`main.py --skip-fetch`, `main_mensuel.py --skip-fetch`, `main_pharma.py`) puis push (Option A) ou `vercel --prod` (Option B). Variante CI GitHub Actions avec `VERCEL_TOKEN` à étudier ensuite (le checkpoint de 837 Mo doit être mis en cache Hugging Face).
+- [x] `vercel.json` à la racine (réécritures `/`, `/lits`, `/mensuel`, `/pharma` vers `outputs/`).
+- [x] Branche de travail de l'agent Mistral : `mistral` (pushée sur origin), pour différencier des autres agents.
+- [ ] Déployer (à faire côté compte Vercel de l'utilisateur) : sur [vercel.com/new](https://vercel.com/new), importer `RisqueSept/TimePharm`, Framework Preset = **Other**, Build Command et Output Directory **vides** ; puis Settings → Git → **Production Branch = `mistral`**. Chaque push sur `mistral` redéploie ; les autres branches ont une preview.
+- [x] Procédure de mise à jour : `./scripts/publier.sh` (régénère les 3 dashboards avec `--skip-fetch`, lance les tests, commit + push des `outputs/`). Variante CI GitHub Actions avec `VERCEL_TOKEN` à étudier ensuite (checkpoint de 837 Mo à mettre en cache Hugging Face).
 - [ ] Vérifier en ligne : les 3 dashboards + les CSV/PNG de `outputs/` accessibles, navigation entre pages.
 - [ ] (Optionnel) domaine personnalisé dans les réglages Vercel.
 
@@ -18,9 +19,9 @@ Les trois dashboards (`outputs/dashboard_lits.html`, `dashboard_mensuel.html`, `
 
 | # | Chantier | Pourquoi (constat) | Fichiers concernés | Fait quand |
 |---|---|---|---|---|
-| 1 | **Test anti-fuite temporelle** : modifier toutes les données postérieures à une origine et vérifier que la prévision à cette origine est inchangée | Le masquage ANSM/Sentinelles est codé à la main, jamais prouvé | `tests/`, `src/modele_pharma.py`, `src/modele_volumes_pharma.py` | test rouge→vert ajouté et vert en CI locale |
-| 2 | **Tests unitaires manquants** sur la chronologie des relevés (horizons 14/28 j) et des volumes (délai, horizons 1–3 mois) | `tests/` couvre lits/mensuel mais pas le cas prioritaire pharma | `tests/test_recherche_pharma.py`, `tests/test_regressions.py` | nouveaux tests passent |
-| 3 | **Manifeste de run** : hash des CSV d'entrée, révision du modèle, paramètres, date → `outputs/manifest.json` par exécution | « les résultats ont changé » n'est pas diagnosable aujourd'hui | `main*.py`, nouveau `src/manifest.py` | chaque run écrit son manifeste |
+| 1 | **Test anti-fuite temporelle** : modifier toutes les données postérieures à une origine et vérifier que la prévision à cette origine est inchangée | Le masquage ANSM/Sentinelles est codé à la main, jamais prouvé | `tests/test_fuites_pharma.py` (nouveau), `src/modele_pharma.py`, `src/modele_volumes_pharma.py` | ✅ fait — 4 tests anti-fuite, `unittest discover` au vert (24 tests) |
+| 2 | **Tests unitaires manquants** sur la chronologie des relevés (horizons 14/28 j) et des volumes (délai, horizons 1–3 mois) | `tests/` couvre lits/mensuel mais pas le cas prioritaire pharma | `tests/test_fuites_pharma.py` (nouveau) | ✅ fait — fenêtre cible ±3 j, `derniere_cible_connue < origine`, cutoff volumes, structure horizons 1–3 |
+| 3 | **Manifeste de run** : hash des CSV d'entrée, révision du modèle, paramètres, date → `outputs/manifest.json` par exécution | « les résultats ont changé » n'est pas diagnosable aujourd'hui | `src/manifest.py` (nouveau), `main.py`, `main_mensuel.py`, `main_pharma.py`, `tests/test_manifest.py` | ✅ fait — `manifest.json` + historique `outputs/manifests/`, écrit par les 3 pipelines |
 | 4 | **Calibration mesurée** : couverture empirique des quantiles 10–90 %, Brier + courbe de fiabilité des scores de tension, biais signé par forme (pas seulement le total) | DATA.md : « la couverture réelle dépend du domaine », « la calibration reste à mesurer » | `src/modele_pharma.py`, `src/modele_volumes_pharma.py`, dashboards | métriques affichées dans les dashboards/CSV |
 | 5 | **Vrai calendrier de délai Medic'AM** par mois à partir de `data/research/pharma/medicam_dates_archives.csv`, utilisé dans le backtest courant | délai simulé 2 mois = WAPE 9,74 % ; archives vérifiables = 13,0–13,2 % | `src/modele_volumes_pharma.py`, `src/recherche_archives_pharma.py` | backtest courant utilise le délai réel |
 | 6 | **Période de vérification réellement réservée** + intervalles de confiance du gain (block bootstrap / Diebold-Mariano) au lieu du rééchantillonnage « indicatif » | sept. 2024–août 2026 déjà inclus dans les stats globales ; poids du mélange choisi sur le développement | `src/recherche_volumes_pharma.py`, `src/recherche_delai_pharma.py` | mois futurs exclus de tout réglage, IC publiés |
