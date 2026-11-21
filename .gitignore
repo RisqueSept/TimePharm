@@ -1,6 +1,7 @@
 .venv/
 .venv-timestral/
 data/models/
+data/cache/
 __pycache__/
 .vercel
 .env*
