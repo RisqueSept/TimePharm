@@ -71,6 +71,13 @@ th { color: var(--muted); font-weight: 650; }
   .metrics > div { padding: 7px; }
   .metrics span, .metrics small { font-size: 0.74rem; }
 }
+
+/* Bandeau de fraîcheur des données */
+.fraicheur { margin: 14px 0 0; }
+.fraicheur ul { display: flex; flex-wrap: wrap; gap: 8px 24px; list-style: none; margin: 0; padding: 10px 14px; background: #eef3fd; border: 1px solid #cfddf5; border-radius: 8px; }
+.fraicheur li { display: flex; flex-direction: column; }
+.fraicheur li span { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #5a6b8c; }
+.fraicheur li strong { font-size: 14px; }
 </style>
 </head>
 <body>
@@ -84,6 +91,7 @@ th { color: var(--muted); font-weight: 650; }
   </div></header>
   <main class="shell">
     <header class="intro"><h1>Capacité hospitalière en France</h1><p>Lits d’hospitalisation complète recensés par la DREES. Les scénarios MCO permettent aussi de comparer la capacité projetée et la charge selon l’activité.</p></header>
+    <aside class="fraicheur" role="note" aria-label="Fraîcheur des données"><ul><li><span>Tableau généré le</span><strong>2026-11-21T20:46:41+00:00</strong></li><li><span>Révision du modèle</span><strong>—</strong></li><li><span>Dernière année SAE observée</span><strong>2025</strong></li></ul></aside>
 
     <section id="comparaison" class="panel" aria-labelledby="titre-comparaison">
       <div class="section-head">

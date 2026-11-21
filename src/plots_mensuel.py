@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from dashboard import MODELES, enregistrements, generer_html
+from dashboard import MODELES, enregistrements, fraicheur_dashboard, generer_html
 
 OUT = Path(__file__).resolve().parents[1] / "outputs"
 FRANCE = "France entière"
@@ -84,6 +84,7 @@ def generer_dashboard_mensuel() -> str:
          ("prevision_mensuelle_regions.csv", "Projection par région (CSV)"),
          ("prevision_mensuelle_france.csv", "Projection France (CSV)"),
          ("prevalence_projections_2030.csv", "Prévalences à 2030 (CSV)")],
+        fraicheur=fraicheur_dashboard(OUT.parent, **{"Dernier mois observé": str(full.mois.max())}),
     )
 
 

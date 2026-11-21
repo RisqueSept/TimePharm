@@ -1,6 +1,7 @@
 """Composants partagés des tableaux HTML autonomes."""
 
 import json
+from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
 
@@ -28,7 +29,23 @@ def _options(options):
     return "".join(f'<option value="{escape(str(k))}">{escape(v)}</option>' for k, v in options)
 
 
-def generer_html(dest, titre, accroche, donnees, note_projection, analyses, liens):
+def fraicheur_dashboard(racine, **extra):
+    """Paires label→valeur pour le bandeau de fraîcheur (dernier manifeste + extras)."""
+    try:
+        from .manifest import lire_manifest
+    except ImportError:  # import « plat » (sys.path contient src/)
+        from manifest import lire_manifest
+    man = lire_manifest(racine) or {}
+    date_gen = man.get("date_utc") or datetime.now(timezone.utc).isoformat(timespec="seconds")
+    paires = {
+        "Tableau généré le": date_gen,
+        "Révision du modèle": (man.get("revision_modele") or "—")[:12],
+    }
+    paires.update(extra)
+    return paires
+
+
+def generer_html(dest, titre, accroche, donnees, note_projection, analyses, liens, fraicheur=None):
     dossiers = Path(__file__).resolve().parent
     css = (dossiers / "dashboard.css").read_text(encoding="utf-8")
     script = (dossiers / "dashboard.js").read_text(encoding="utf-8")
@@ -48,6 +65,14 @@ def generer_html(dest, titre, accroche, donnees, note_projection, analyses, lien
         regions = _options((nom, nom) for nom in donnees["territoires"])
         territoires = f'<label>Territoire<select id="territoire">{regions}</select></label>'
     liens_html = "".join(f'<a href="{escape(url)}">{escape(texte)}</a>' for url, texte in liens)
+    bandeau = ""
+    if fraicheur:
+        items = "".join(
+            f'<li><span>{escape(str(k))}</span><strong>{escape(str(v))}</strong></li>'
+            for k, v in fraicheur.items()
+        )
+        bandeau = ('\n    <aside class="fraicheur" role="note" aria-label="Fraîcheur des données">'
+                   f'<ul>{items}</ul></aside>')
     html = f"""<!doctype html>
 <html lang="fr">
 <head>
@@ -66,7 +91,7 @@ def generer_html(dest, titre, accroche, donnees, note_projection, analyses, lien
     </nav>
   </div></header>
   <main class="shell">
-    <header class="intro"><h1>{escape(titre)}</h1><p>{escape(accroche)}</p></header>
+    <header class="intro"><h1>{escape(titre)}</h1><p>{escape(accroche)}</p></header>{bandeau}
 
     <section id="comparaison" class="panel" aria-labelledby="titre-comparaison">
       <div class="section-head">

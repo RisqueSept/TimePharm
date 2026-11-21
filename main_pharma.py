@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from src.delai_medicam import delais_pipeline
 from src.inference_timestral import MistralTimestral
 from src.manifest import ecrire_manifest
 from src.modele_pharma import (
@@ -15,18 +16,20 @@ def main():
     root = Path(__file__).resolve().parent
     dossier = root / "data" / "raw" / "pharma"
     stocks, ira, volumes = charger_donnees(dossier)
+    delais = delais_pipeline(root)
     manifest = ecrire_manifest(root, "pharma", sorted(dossier.glob("*.csv")), {
         "horizons_tensions_jours": list(HORIZONS),
         "horizons_volumes_mois": list(HORIZONS_VOLUMES),
-        "delai_publication_mois": DELAI_MOIS,
+        "delai_publication": "archives_documentées" if delais is not None else f"fixe_{DELAI_MOIS}_mois",
     })
     moteur = MistralTimestral()
     print("Backtest hebdomadaire avec Timestral-209M")
     predictions = previsions_timestral(stocks, ira, backtest(stocks, ira), moteur)
     out = root / "outputs"
     out.mkdir(exist_ok=True)
-    print("Backtest mensuel et projections des boîtes avec Timestral-209M")
-    test_volumes, futur_volumes = prevoir_volumes(volumes, stocks.disponible.max(), moteur)
+    print("Backtest mensuel et projections des boîtes avec Timestral-209M"
+          + (" (délai réel Medic'AM)" if delais is not None else ""))
+    test_volumes, futur_volumes = prevoir_volumes(volumes, stocks.disponible.max(), moteur, delais=delais)
     predictions.to_csv(out / "backtest_pharma.csv", index=False, float_format="%.6f")
     test_volumes.to_csv(out / "backtest_boites_pharma.csv", index=False)
     futur_volumes.to_csv(out / "previsions_boites_pharma.csv", index=False)

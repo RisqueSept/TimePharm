@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from dashboard import MODELES, enregistrements, generer_html
+from dashboard import MODELES, enregistrements, fraicheur_dashboard, generer_html
 
 BASE = Path(__file__).resolve().parents[1]
 PROCESSED = BASE / "data" / "processed"
@@ -117,6 +117,7 @@ def generer_dashboard() -> str:
          ("prediction_lits_2026_2035.csv", "Projection nationale (CSV)"),
          ("scenarios_capacite_mco.csv", "Scénarios MCO nationaux (CSV)"),
          ("scenarios_capacite_mco_regions.csv", "Scénarios MCO par territoire (CSV)")],
+        fraicheur=fraicheur_dashboard(BASE, **{"Dernière année SAE observée": int(hist.annee.max())}),
     )
 
 

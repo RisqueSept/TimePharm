@@ -113,3 +113,14 @@ def delais_reel(editions, jour_origine=21):
         return cutoff_pour(date_origine, editions)
 
     return delais
+
+
+def delais_pipeline(racine, jour_origine=21):
+    """Calendrier de délai réel pour le pipeline courant, ou None si les archives manquent.
+
+    Branchement : ``prevoir_volumes(volumes, date_depart, moteur, delais=delais_pipeline(root))``.
+    """
+    chemin = Path(racine) / "data" / "research" / "pharma" / "medicam_dates_archives.csv"
+    if not chemin.exists():
+        return None
+    return delais_reel(editions_archives(chemin), jour_origine=jour_origine)

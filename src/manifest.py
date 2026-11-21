@@ -45,7 +45,10 @@ def ecrire_manifest(racine, run, entrees, parametres, destination=None):
     `entrees` : chemins des fichiers de données consommés (hashés).
     `parametres` : dictionnaire JSON-sérialisable (horizons, délais, options).
     """
-    from .inference_timestral import MODELE, REVISION
+    try:
+        from .inference_timestral import MODELE, REVISION
+    except ImportError:  # import « plat » (sys.path contient src/, ex. main.py)
+        from inference_timestral import MODELE, REVISION
 
     racine = Path(racine)
     entrees = [str(Path(e)) for e in entrees]
@@ -73,3 +76,14 @@ def ecrire_manifest(racine, run, entrees, parametres, destination=None):
     )
     destination.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
+
+
+def lire_manifest(racine):
+    """Dernier manifeste de run (`outputs/manifest.json`), ou None s'il est absent/illisible."""
+    p = Path(racine) / "outputs" / "manifest.json"
+    if not p.is_file():
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
