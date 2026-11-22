@@ -1,0 +1,13 @@
+# Données brutes volumineuses (téléchargeables via les scripts --fetch, data.gouv.fr)
+data/raw/
+data/models/
+# Résultats générés
+outputs/
+# Fichiers système
+.DS_Store
+# Python
+__pycache__/
+*.py[cod]
+.venv*/
+# Env local (jamais de secrets dans le repo)
+.env

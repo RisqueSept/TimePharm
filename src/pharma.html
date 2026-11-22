@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disponibilité des antibiotiques · Timestral-209M</title>
+<style>__CSS__</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="#haut"><span aria-hidden="true" class="brand-icon">↗</span> Prévisions santé</a>
+    <nav aria-label="Sections"><a href="#backtest">Tensions</a><a href="#boites">Boîtes</a><a href="#signaux">Données</a><a href="#methode">Méthode</a></nav>
+  </div>
+</header>
+<main id="haut" class="wrap">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">France · Antibiotiques pédiatriques</p>
+      <h1>Disponibilité des<br>antibiotiques</h1>
+      <p>Prévisions de couverture des grossistes et de boîtes remboursées avec Timestral-209M de Mistral AI.</p>
+    </div>
+    <dl class="hero-stats">
+      <div><dt>Formes et dosages buvables</dt><dd id="product-count"></dd></div>
+      <div><dt>Dates de relevés ANSM</dt><dd id="report-count"></dd></div>
+      <div><dt>Dernier relevé étudié</dt><dd id="last-report"></dd></div>
+    </dl>
+  </header>
+
+  <section id="backtest" aria-labelledby="backtest-title">
+    <div class="section-head">
+      <div><h2 id="backtest-title">Prévisions et relevés réels</h2><p>Timestral-209M estime le risque que la couverture des grossistes soit insuffisante à 14 ou 28 jours. Le relevé ANSM à cette échéance permet de vérifier la prévision.</p></div>
+      <a class="button" href="backtest_pharma.csv" download>↓ Télécharger le CSV</a>
+    </div>
+    <div class="filters">
+      <label>Forme buvable<select id="product"></select></label>
+      <label>Saison de départ<select id="season"></select></label>
+      <label>Horizon<select id="horizon"></select></label>
+      <label class="threshold">Seuil d’alerte <output id="threshold-value" for="threshold">50 %</output>
+        <input id="threshold" type="range" min="10" max="90" step="5" value="50">
+      </label>
+    </div>
+    <label class="check"><input id="new-only" type="checkbox"> Limiter aux départs où la couverture était encore suffisante</label>
+    <div class="metrics" aria-live="polite">
+      <article><h3>Score de Brier</h3><strong id="brier"></strong><p id="brier-note"></p></article>
+      <article><h3>Cas détectés</h3><strong id="detected"></strong><p id="detected-note"></p></article>
+      <article><h3>Fausses alertes</h3><strong id="false-alarms"></strong><p id="false-note"></p></article>
+      <article><h3>Prévisions vérifiées</h3><strong id="sample"></strong><p id="sample-note"></p></article>
+    </div>
+    <p class="benchmark" id="persistence"></p>
+    <article id="onset" class="episode onset" hidden>
+      <h3>Comparaison sur les nouvelles dégradations</h3>
+      <p id="onset-threshold"></p>
+      <p id="onset-budget"></p>
+      <p class="caption">Les minimums de fausses alertes sont calculés après coup pour comparer le classement des risques. Le seuil réglé plus haut sert à simuler une règle d’alerte.</p>
+    </article>
+    <div class="panel">
+      <div class="panel-title"><div><h3>Risque prédit et résultat observé</h3><p>Le losange indique le résultat du relevé ANSM. Survole un point pour retrouver la date de départ.</p></div></div>
+      <div id="forecast" class="chart" aria-label="Probabilités prévues et couverture insuffisante observée"></div>
+      <p class="caption" id="chart-caption"></p>
+      <details>
+        <summary>Voir les prévisions et les relevés sources</summary>
+        <div class="table-scroll">
+          <table><thead><tr><th>Date de prévision</th><th>Date du relevé ANSM</th><th>Forme buvable</th><th>Insuffisance constatée par l’ANSM</th><th>Timestral-209M</th><th>Logistique · référence</th><th>Logistique · avec signaux</th><th id="onset-column" hidden>Logistique · nouvelles dégradations</th></tr></thead>
+          <tbody id="rows"></tbody></table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="boites" aria-labelledby="boxes-title">
+    <div class="section-head">
+      <div><h2 id="boxes-title">Combien de boîtes seront remboursées ?</h2><p>Prévisions mensuelles pour les six formes buvables, à partir des délivrances remboursées en pharmacie de ville.</p></div>
+      <a class="button" href="previsions_boites_pharma.csv" download>↓ Prévisions CSV</a>
+    </div>
+    <div class="filters box-filters">
+      <label>Forme buvable<select id="box-product"></select></label>
+      <label>Horizon<select id="box-horizon"></select></label>
+    </div>
+    <div class="metrics" aria-live="polite">
+      <article><h3 id="box-target"></h3><strong id="box-timestral"></strong><p>Médiane de Timestral-209M</p></article>
+      <article><h3>Référence saisonnière</h3><strong id="box-seasonal"></strong><p>Même mois de l’année précédente</p></article>
+      <article><h3>Erreur moyenne · saisonnier</h3><strong id="box-error-seasonal"></strong><p id="box-test-count"></p></article>
+      <article><h3>Erreur moyenne · Timestral</h3><strong id="box-error-timestral"></strong><p>Écart absolu, en boîtes</p></article>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><div><h3>Historique et prochains mois</h3><p id="box-last"></p></div></div>
+      <div id="box-forecast" class="chart" aria-label="Boîtes réellement remboursées et volumes prévus"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><div><h3>Vérifier les prévisions mensuelles</h3><p>Chaque prévision est calculée avant le mois visé. Le backtest simule le délai de publication en utilisant les remboursements jusqu’à deux mois avant le mois de départ.</p></div></div>
+      <div id="box-backtest" class="chart" aria-label="Backtest des volumes mensuels réellement remboursés"></div>
+      <p class="caption"><a href="backtest_boites_pharma.csv" download>Télécharger le backtest CSV ↓</a></p>
+    </div>
+    <p class="benchmark">Medic’AM mesure les remboursements. Les achats non remboursés et les besoins que les pharmacies n’ont pas pu satisfaire pendant une tension échappent à cette mesure.</p>
+  </section>
+
+  <section id="signaux" aria-labelledby="signals-title">
+    <div class="section-head"><div><h2 id="signals-title">Données historiques</h2><p>Les relevés ANSM et les infections respiratoires alimentent le modèle. Les volumes Medic’AM sont affichés pour donner du contexte.</p></div></div>
+    <div class="panel">
+      <div class="panel-title"><div><h3>Couverture des grossistes</h3><p>Chaque point correspond à un relevé ANSM. Les plages sans point correspondent à des données manquantes.</p></div></div>
+      <div class="chart" id="stocks" aria-label="Chronologie du niveau de couverture des grossistes"></div>
+    </div>
+    <div class="split">
+      <article class="panel"><div class="panel-title"><div><h3>Infections respiratoires aiguës</h3><p>Consultations estimées par semaine et pour 100 000 habitants.</p></div></div><div id="ira" class="chart small" aria-label="Incidence hebdomadaire des infections respiratoires"></div></article>
+      <article class="panel"><div class="panel-title"><div><h3>Boîtes remboursées</h3><p>Volumes mensuels Medic’AM pour les formulations buvables suivies.</p></div></div><div id="volumes" class="chart small" aria-label="Volumes mensuels de médicaments remboursés"></div></article>
+    </div>
+    <aside class="episode">
+      <p class="eyebrow">Hiver 2022–2023</p>
+      <h3>Pourquoi l’amoxicilline a manqué</h3>
+      <p>L’ANSM a documenté une hausse précoce de la demande en antibiotiques, des capacités de production insuffisantes et des reports vers d’autres spécialités. Cet épisode précède les relevés de couverture utilisés pour le backtest.</p>
+      <a href="https://ansm.sante.fr/uploads/2023/10/03/20231005-ra-2022.pdf">Lire le rapport de l’ANSM ↗</a>
+    </aside>
+  </section>
+
+  <section id="methode" aria-labelledby="method-title">
+    <div class="section-head"><div><h2 id="method-title">Méthode et limites</h2></div></div>
+    <div class="method">
+      <article><h3>Ce qui est prédit</h3><p>Une couverture grossiste jugée insuffisante au relevé à venir, à 14 ou 28 jours du départ (tolérance de 3 jours). Plusieurs relevés peuvent appartenir au même épisode. La couverture nationale donne une indication sur les stocks grossistes et la disponibilité de chaque pharmacie peut varier.</p></article>
+      <article><h3>Timestral-209M · Mistral AI</h3><p>Le modèle préentraîné est utilisé localement. Pour les tensions, il reçoit l’historique hebdomadaire de l’état des grossistes et, comme covariables passées, la couverture de l’industrie, celle des officines et l’incidence respiratoire. Le score de risque est déduit de ses quantiles par interpolation au seuil de 0,5 sur l’indicateur binaire.</p></article>
+      <article><h3>Références du backtest</h3><p>Le tableau compare Timestral aux régressions logistiques existantes et au dernier état reconduit. Le filtre sur la couverture initiale affiche aussi la régression entraînée uniquement sur les départs en couverture suffisante.</p></article>
+      <article><h3>Ce qui était disponible</h3><p>L’entraînement utilise les cibles connues avant chaque départ. Les dates de diffusion ANSM sont estimées d’après les PDF et leurs archives. La série Sentinelles est révisée et décalée de 10 jours à partir du lundi de la semaine mesurée. Le backtest reste approximatif tant que les versions publiées à l’époque manquent.</p></article>
+      <article><h3>Comment lire les scores</h3><p>Le score de Brier est l’écart quadratique moyen entre la probabilité et l’issue observée. Plus il est bas, mieux c’est. La persistance donne une probabilité de 100 % quand le dernier relevé était déjà insuffisant, de 0 % sinon. Les cas sont des prévisions portant sur un relevé, avec des fenêtres parfois communes. Le gain prédictif ne permet pas d’attribuer une cause à une tension.</p></article>
+    </div>
+    <div class="sources"><a href="https://huggingface.co/mistralai/Timestral-209M">Mistral AI · Timestral-209M ↗</a><a href="https://ansm.sante.fr/dossiers-thematiques/plan-hivernal">ANSM · Plan hivernal ↗</a><a href="https://www.sentiweb.fr/?page=api">Réseau Sentinelles · API ↗</a><a href="https://www.assurance-maladie.ameli.fr/etudes-et-donnees/medicaments-classe-atc-medicam">Assurance Maladie · Medic’AM ↗</a></div>
+  </section>
+</main>
+<footer class="wrap footer"><span>Timestral-209M · Mistral AI</span><span>Données publiques</span></footer>
+<script type="application/json" id="data">__DATA__</script>
+<script>__PLOTLY__</script>
+<script>__JS__</script>
+</body>
+</html>

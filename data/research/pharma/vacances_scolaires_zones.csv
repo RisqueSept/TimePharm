@@ -1,0 +1,220 @@
+zones,start_date,end_date,description
+Zone A,2017-10-21,2017-11-06,Vacances de la Toussaint
+Zone B,2017-10-21,2017-11-06,Vacances de la Toussaint
+Zone C,2017-10-21,2017-11-06,Vacances de la Toussaint
+Zone A,2017-12-23,2018-01-08,Vacances de Noël
+Zone B,2017-12-23,2018-01-08,Vacances de Noël
+Zone C,2017-12-23,2018-01-08,Vacances de Noël
+Zone A,2018-02-10,2018-02-26,Vacances d'Hiver
+Zone C,2018-02-17,2018-03-05,Vacances d'Hiver
+Zone B,2018-02-24,2018-03-12,Vacances d'Hiver
+Zone A,2018-04-07,2018-04-23,Vacances de Printemps
+Zone C,2018-04-14,2018-04-30,Vacances de Printemps
+Zone B,2018-04-21,2018-05-07,Vacances de Printemps
+Zone A,2018-07-07,2018-09-03,Vacances d'Été
+Zone A,2018-07-07,2018-08-31,Vacances d'Été
+Zone B,2018-07-07,2018-09-03,Vacances d'Été
+Zone B,2018-07-07,2018-08-31,Vacances d'Été
+Zone C,2018-07-07,2018-09-03,Vacances d'Été
+Zone C,2018-07-07,2018-08-31,Vacances d'Été
+Zone A,2018-10-20,2018-11-05,Vacances de la Toussaint
+Zone B,2018-10-20,2018-11-05,Vacances de la Toussaint
+Zone C,2018-10-20,2018-11-05,Vacances de la Toussaint
+Zone A,2018-12-22,2019-01-07,Vacances de Noël
+Zone B,2018-12-22,2019-01-07,Vacances de Noël
+Zone C,2018-12-22,2019-01-07,Vacances de Noël
+Zone B,2019-02-09,2019-02-25,Vacances d'Hiver
+Zone A,2019-02-16,2019-03-04,Vacances d'Hiver
+Zone C,2019-02-23,2019-03-11,Vacances d'Hiver
+Zone B,2019-04-06,2019-04-23,Vacances de Printemps
+Zone A,2019-04-13,2019-04-29,Vacances de Printemps
+Zone C,2019-04-20,2019-05-06,Vacances de Printemps
+Zone A,2019-05-29,2019-06-03,Pont de l'Ascension
+Zone B,2019-05-29,2019-06-03,Pont de l'Ascension
+Zone C,2019-05-29,2019-06-03,Pont de l'Ascension
+Zone A,2019-07-06,2019-09-02,Vacances d'Été
+Zone A,2019-07-06,2019-08-30,Vacances d'Été
+Zone B,2019-07-06,2019-09-02,Vacances d'Été
+Zone B,2019-07-06,2019-08-30,Vacances d'Été
+Zone C,2019-07-06,2019-09-02,Vacances d'Été
+Zone C,2019-07-06,2019-08-30,Vacances d'Été
+Zone A,2019-10-19,2019-11-04,Vacances de la Toussaint
+Zone B,2019-10-19,2019-11-04,Vacances de la Toussaint
+Zone C,2019-10-19,2019-11-04,Vacances de la Toussaint
+Zone A,2019-12-21,2020-01-06,Vacances de Noël
+Zone B,2019-12-21,2020-01-06,Vacances de Noël
+Zone C,2019-12-21,2020-01-06,Vacances de Noël
+Zone C,2020-02-08,2020-02-24,Vacances d'Hiver
+Zone B,2020-02-15,2020-03-02,Vacances d'Hiver
+Zone A,2020-02-22,2020-03-09,Vacances d'Hiver
+Zone C,2020-04-04,2020-04-20,Vacances de Printemps
+Zone B,2020-04-11,2020-04-27,Vacances de Printemps
+Zone A,2020-04-18,2020-05-04,Vacances de Printemps
+Zone A,2020-05-20,2020-05-25,Pont de l'Ascension
+Zone B,2020-05-20,2020-05-25,Pont de l'Ascension
+Zone C,2020-05-20,2020-05-25,Pont de l'Ascension
+Zone A,2020-07-04,2020-09-01,Vacances d'Été
+Zone A,2020-07-04,2020-08-31,Vacances d'Été
+Zone B,2020-07-04,2020-09-01,Vacances d'Été
+Zone B,2020-07-04,2020-08-31,Vacances d'Été
+Zone C,2020-07-04,2020-09-01,Vacances d'Été
+Zone C,2020-07-04,2020-08-31,Vacances d'Été
+Zone A,2020-10-17,2020-11-02,Vacances de la Toussaint
+Zone B,2020-10-17,2020-11-02,Vacances de la Toussaint
+Zone C,2020-10-17,2020-11-02,Vacances de la Toussaint
+Zone A,2020-12-19,2021-01-04,Vacances de Noël
+Zone B,2020-12-19,2021-01-04,Vacances de Noël
+Zone C,2020-12-19,2021-01-04,Vacances de Noël
+Zone A,2021-02-06,2021-02-22,Vacances d'Hiver
+Zone C,2021-02-13,2021-03-01,Vacances d'Hiver
+Zone B,2021-02-20,2021-03-08,Vacances d'Hiver
+Zone A,2021-04-10,2021-04-26,Vacances de Printemps
+Zone B,2021-04-10,2021-04-26,Vacances de Printemps
+Zone C,2021-04-10,2021-04-26,Vacances de Printemps
+Zone A,2021-05-13,2021-05-17,Pont de l'Ascension
+Zone B,2021-05-13,2021-05-17,Pont de l'Ascension
+Zone C,2021-05-13,2021-05-17,Pont de l'Ascension
+Zone A,2021-07-06,2021-09-02,Vacances d'Été
+Zone A,2021-07-06,2021-09-01,Vacances d'Été
+Zone B,2021-07-06,2021-09-02,Vacances d'Été
+Zone B,2021-07-06,2021-09-01,Vacances d'Été
+Zone C,2021-07-06,2021-09-02,Vacances d'Été
+Zone C,2021-07-06,2021-09-01,Vacances d'Été
+Zone A,2021-10-23,2021-11-08,Vacances de la Toussaint
+Zone B,2021-10-23,2021-11-08,Vacances de la Toussaint
+Zone C,2021-10-23,2021-11-08,Vacances de la Toussaint
+Zone A,2021-12-18,2022-01-03,Vacances de Noël
+Zone B,2021-12-18,2022-01-03,Vacances de Noël
+Zone C,2021-12-18,2022-01-03,Vacances de Noël
+Zone B,2022-02-05,2022-02-21,Vacances d'Hiver
+Zone A,2022-02-12,2022-02-28,Vacances d'Hiver
+Zone C,2022-02-19,2022-03-07,Vacances d'Hiver
+Zone B,2022-04-09,2022-04-25,Vacances de Printemps
+Zone A,2022-04-16,2022-05-02,Vacances de Printemps
+Zone C,2022-04-23,2022-05-09,Vacances de Printemps
+Zone A,2022-05-26,2022-05-30,Pont de l'Ascension
+Zone B,2022-05-26,2022-05-30,Pont de l'Ascension
+Zone C,2022-05-26,2022-05-30,Pont de l'Ascension
+Zone A,2022-07-07,2022-09-01,Vacances d'Été
+Zone A,2022-07-07,2022-08-31,Vacances d'Été
+Zone B,2022-07-07,2022-09-01,Vacances d'Été
+Zone B,2022-07-07,2022-08-31,Vacances d'Été
+Zone C,2022-07-07,2022-09-01,Vacances d'Été
+Zone C,2022-07-07,2022-08-31,Vacances d'Été
+Zone A,2022-10-22,2022-11-07,Vacances de la Toussaint
+Zone B,2022-10-22,2022-11-07,Vacances de la Toussaint
+Zone C,2022-10-22,2022-11-07,Vacances de la Toussaint
+Zone A,2022-12-17,2023-01-03,Vacances de Noël
+Zone B,2022-12-17,2023-01-03,Vacances de Noël
+Zone C,2022-12-17,2023-01-03,Vacances de Noël
+Zone A,2023-02-04,2023-02-20,Vacances d'Hiver
+Zone B,2023-02-11,2023-02-27,Vacances d'Hiver
+Zone C,2023-02-18,2023-03-06,Vacances d'Hiver
+Zone A,2023-04-08,2023-04-24,Vacances de Printemps
+Zone B,2023-04-15,2023-05-02,Vacances de Printemps
+Zone C,2023-04-22,2023-05-09,Vacances de Printemps
+Zone A,2023-05-18,2023-05-22,Pont de l'Ascension
+Zone B,2023-05-18,2023-05-22,Pont de l'Ascension
+Zone C,2023-05-18,2023-05-22,Pont de l'Ascension
+Zone A,2023-07-08,2023-09-04,Vacances d'Été
+Zone A,2023-07-08,2023-09-01,Vacances d'Été
+Zone B,2023-07-08,2023-09-04,Vacances d'Été
+Zone B,2023-07-08,2023-09-01,Vacances d'Été
+Zone C,2023-07-08,2023-09-04,Vacances d'Été
+Zone C,2023-07-08,2023-09-01,Vacances d'Été
+Zone A,2023-10-21,2023-11-06,Vacances de la Toussaint
+Zone B,2023-10-21,2023-11-06,Vacances de la Toussaint
+Zone C,2023-10-21,2023-11-06,Vacances de la Toussaint
+Zone A,2023-12-23,2024-01-08,Vacances de Noël
+Zone B,2023-12-23,2024-01-08,Vacances de Noël
+Zone C,2023-12-23,2024-01-08,Vacances de Noël
+Zone C,2024-02-10,2024-02-26,Vacances d'Hiver
+Zone A,2024-02-17,2024-03-04,Vacances d'Hiver
+Zone B,2024-02-24,2024-03-11,Vacances d'Hiver
+Zone C,2024-04-06,2024-04-22,Vacances de Printemps
+Zone A,2024-04-13,2024-04-29,Vacances de Printemps
+Zone B,2024-04-20,2024-05-06,Vacances de Printemps
+Zone A,2024-05-09,2024-05-13,Pont de l'Ascension
+Zone B,2024-05-09,2024-05-13,Pont de l'Ascension
+Zone C,2024-05-09,2024-05-13,Pont de l'Ascension
+Zone A,2024-07-06,2024-09-02,Vacances d'Été
+Zone A,2024-07-06,2024-08-30,Vacances d'Été
+Zone B,2024-07-06,2024-09-02,Vacances d'Été
+Zone B,2024-07-06,2024-08-30,Vacances d'Été
+Zone C,2024-07-06,2024-09-02,Vacances d'Été
+Zone C,2024-07-06,2024-08-30,Vacances d'Été
+Zone A,2024-10-19,2024-11-04,Vacances de la Toussaint
+Zone B,2024-10-19,2024-11-04,Vacances de la Toussaint
+Zone C,2024-10-19,2024-11-04,Vacances de la Toussaint
+Zone A,2024-12-21,2025-01-06,Vacances de Noël
+Zone B,2024-12-21,2025-01-06,Vacances de Noël
+Zone C,2024-12-21,2025-01-06,Vacances de Noël
+Zone B,2025-02-08,2025-02-24,Vacances d'Hiver
+Zone C,2025-02-15,2025-03-03,Vacances d'Hiver
+Zone A,2025-02-22,2025-03-10,Vacances d'Hiver
+Zone B,2025-04-05,2025-04-22,Vacances de Printemps
+Zone C,2025-04-12,2025-04-28,Vacances de Printemps
+Zone A,2025-04-19,2025-05-05,Vacances de Printemps
+Zone A,2025-05-29,2025-06-02,Pont de l'Ascension
+Zone B,2025-05-29,2025-06-02,Pont de l'Ascension
+Zone C,2025-05-29,2025-06-02,Pont de l'Ascension
+Zone A,2025-07-05,2025-09-01,Vacances d'Été
+Zone A,2025-07-05,2025-08-29,Vacances d'Été
+Zone B,2025-07-05,2025-09-01,Vacances d'Été
+Zone B,2025-07-05,2025-08-29,Vacances d'Été
+Zone C,2025-07-05,2025-09-01,Vacances d'Été
+Zone C,2025-07-05,2025-08-29,Vacances d'Été
+Zone A,2025-10-18,2025-11-03,Vacances de la Toussaint
+Zone B,2025-10-18,2025-11-03,Vacances de la Toussaint
+Zone C,2025-10-18,2025-11-03,Vacances de la Toussaint
+Zone A,2025-12-20,2026-01-05,Vacances de Noël
+Zone B,2025-12-20,2026-01-05,Vacances de Noël
+Zone C,2025-12-20,2026-01-05,Vacances de Noël
+Zone A,2026-02-07,2026-02-23,Vacances d'Hiver
+Zone B,2026-02-14,2026-03-02,Vacances d'Hiver
+Zone C,2026-02-21,2026-03-09,Vacances d'Hiver
+Zone A,2026-04-04,2026-04-20,Vacances de Printemps
+Zone B,2026-04-11,2026-04-27,Vacances de Printemps
+Zone C,2026-04-18,2026-05-04,Vacances de Printemps
+Zone A,2026-05-14,2026-05-18,Pont de l'Ascension
+Zone B,2026-05-14,2026-05-18,Pont de l'Ascension
+Zone C,2026-05-14,2026-05-18,Pont de l'Ascension
+Zone A,2026-07-04,2026-09-01,Vacances d'Été
+Zone A,2026-07-04,2026-08-31,Vacances d'Été
+Zone B,2026-07-04,2026-09-01,Vacances d'Été
+Zone B,2026-07-04,2026-08-31,Vacances d'Été
+Zone C,2026-07-04,2026-09-01,Vacances d'Été
+Zone C,2026-07-04,2026-08-31,Vacances d'Été
+Zone A,2026-10-17,2026-11-02,Vacances de la Toussaint
+Zone B,2026-10-17,2026-11-02,Vacances de la Toussaint
+Zone C,2026-10-17,2026-11-02,Vacances de la Toussaint
+Zone A,2026-12-19,2027-01-04,Vacances de Noël
+Zone B,2026-12-19,2027-01-04,Vacances de Noël
+Zone C,2026-12-19,2027-01-04,Vacances de Noël
+Zone C,2027-02-06,2027-02-22,Vacances d'Hiver
+Zone A,2027-02-13,2027-03-01,Vacances d'Hiver
+Zone B,2027-02-20,2027-03-08,Vacances d'Hiver
+Zone C,2027-04-03,2027-04-19,Vacances de Printemps
+Zone A,2027-04-10,2027-04-26,Vacances de Printemps
+Zone B,2027-04-17,2027-05-03,Vacances de Printemps
+Zone A,2027-07-03,2027-09-02,Vacances d'Été
+Zone A,2027-07-03,2027-09-01,Vacances d'Été
+Zone B,2027-07-03,2027-09-02,Vacances d'Été
+Zone B,2027-07-03,2027-09-01,Vacances d'Été
+Zone C,2027-07-03,2027-09-02,Vacances d'Été
+Zone C,2027-07-03,2027-09-01,Vacances d'Été
+Zone A,2027-10-23,2027-11-08,Vacances de la Toussaint
+Zone B,2027-10-23,2027-11-08,Vacances de la Toussaint
+Zone C,2027-10-23,2027-11-08,Vacances de la Toussaint
+Zone A,2027-12-18,2028-01-03,Vacances de Noël
+Zone B,2027-12-18,2028-01-03,Vacances de Noël
+Zone C,2027-12-18,2028-01-03,Vacances de Noël
+Zone B,2028-02-05,2028-02-21,Vacances d'Hiver
+Zone C,2028-02-12,2028-02-28,Vacances d'Hiver
+Zone A,2028-02-19,2028-03-06,Vacances d'Hiver
+Zone B,2028-04-08,2028-04-24,Vacances de Printemps
+Zone C,2028-04-15,2028-05-02,Vacances de Printemps
+Zone A,2028-04-22,2028-05-09,Vacances de Printemps
+Zone A,2028-05-25,2028-05-29,Pont de l'Ascension
+Zone B,2028-05-25,2028-05-29,Pont de l'Ascension
+Zone C,2028-05-25,2028-05-29,Pont de l'Ascension

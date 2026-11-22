@@ -1,0 +1,7 @@
+pandas>=2.0
+numpy>=1.26
+scikit-learn>=1.4
+matplotlib>=3.8
+py7zr>=0.20
+plotly>=5.18
+timestral @ https://codeload.github.com/mistralai/timestral/tar.gz/a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff
